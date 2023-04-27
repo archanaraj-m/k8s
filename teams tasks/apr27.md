@@ -50,6 +50,7 @@ kubectl port-forward service/spc --address "0.0.0.0" 7080:8080
 ![preview](../k8s_images/img11.png)
 
 # kind
+[referhere](https://kind.sigs.k8s.io/docs/user/quick-start/#installation) in this see linux.
 
 * launch an instance(t2.medium) and in stall docker in that after that run this commands
 ```
