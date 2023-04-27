@@ -5,8 +5,8 @@
 * in all 3 nodes install docker with docker commands
 ```
 curl -fsSL https://get.docker.com -o get-docker.sh
-  sh get-docker.sh
- sudo usermod -aG docker ubuntu
+sh get-docker.sh
+sudo usermod -aG docker ubuntu
 
 exit and relogin
 ```
