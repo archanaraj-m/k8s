@@ -16,8 +16,8 @@ Kubernetes Architecture
 [referhere](https://www.geeksforgeeks.org/kubernetes-architecture/)
 
 
-# 2) Setup k8s on single node using minikube and kind
-# 3) Run the Spring Pet Clinic
+2. Setup k8s on single node using minikube and kind
+3. Run the Spring Pet Clinic
 * First we can create an instance(t2.medium) in that install docker
 ```
 curl -fsSL https://get.docker.com -o get-docker.sh
