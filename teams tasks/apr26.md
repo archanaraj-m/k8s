@@ -1,3 +1,4 @@
+Kubernetes (k8s) Activities (DAY01-26/APR/2023)
 # 1) Write a Pod Spec for Spring PetClinic and nopCommerce Applications
 
 * First we can create 3 instances with t2 medium
