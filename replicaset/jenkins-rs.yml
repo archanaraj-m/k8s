@@ -25,3 +25,12 @@ spec:
           args:
             - sleep
             - 1d
+
+
+# kubectl apply -f jenkins-rs.yml
+# kubectl get rs
+# kubectl get po
+# kubectl describe rs
+# kubectl delete po <pod id or name>
+# kubectl describe rs
+# kubectl get rs

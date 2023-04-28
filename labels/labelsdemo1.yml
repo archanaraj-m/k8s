@@ -11,3 +11,16 @@ spec:
       image: nginx:1.23
       ports:
         - containerPort: 80
+
+# kubectl apply -f labeldemo1.yml
+# kubectl get po --show-labels
+#For manually create the labels means not in yml file in the above we can create label is app-nginx
+# kubectl run n1 --image=nginx --labels "app=nginx,component=web"
+# kubectl get po --show-labels
+# kubectl run n1 --image=nginx --labels "app=web,component=web"
+# kubectl get po --show-labels
+# kubectl get po --selctor "app=nginx" --show-labels
+# kubectl get po --selctor "app!=nginx" --show-labels
+# kubectl get po --selctor "component,app in (web)" --show-labels
+# kubectl get po --selctor "component,app in (web,nginx)" --show-labels
+#same as it is in jenkins also we created labels
