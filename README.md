@@ -48,3 +48,9 @@ systemctl enable --now cri-docker.socket
 ```
 [Referhere](https://github.com/Mirantis/cri-dockerd)
 * Follow same commands in the above documentation.
+
+
+
+# scaling up and down
+# scaling in and out
+# in k8s everthing stores in etcd controllers
