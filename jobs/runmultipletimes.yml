@@ -19,3 +19,14 @@ spec:
               command:
                 - sleep
                 - 3s
+
+
+# kubectl apply -f runmultipletimes.yml
+# kubectl get cronjobs.batch
+# kubectl get cronjobs.batch -w
+# kubectl get jobs.batch
+# kubectl get po
+# kubectl delete cronjobs.batch runmultipletimes.yml
+# kubectl get cronjobs.batch
+# kubectl get jobs.batch
+# kubectl get po              

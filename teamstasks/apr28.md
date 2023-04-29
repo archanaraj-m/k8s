@@ -200,8 +200,82 @@ kubectl describe po
 
 
 # 4) Creating the Jobs and CronJobs
+* K8s has two types of jobs
+   * Job: Run an activity/script to completion
+   * CronJob: Run an activity/script to completion at specific time period or intervals.
+# Now we can create Jobs
+* For jobs restartPolicy cannot be Always as job will never finish
+* Running job and waiting for completion
+* Following this yml file for Jobs
+* It's paste in ``vi hellojob.yml``
 
+```
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: hellojob
+spec:
+  template:
+    metadata:
+      name: jobpod
+    spec:
+      containers:
+        - image: alpine
+          command:
+            - sleep
+            - 10s
+```
+* Execute the below commands and check the jobs time period in between run the jobs commands again.
+```
+# kubectl apply -f hellojob.yml
+# kubectl get jobs -w
+# kubectl get po
+# kubectl delete jobs.batch hellojob
+# kubectl get jobs
+# kubectl get po 
+```
+# Now we can create the CronJob
+* Cronjob manifest which we have written create a job every minute and waits for completion
+* Follow the yml file for cronjob
+* Paste it in ``vi runmultipletimes.yml``
 
+```
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: periodicjob
+spec:
+  schedule: '* * * * *' 
+  jobTemplate:
+    metadata:
+      name: getlivedata
+    spec:
+      template:
+        metadata:
+          name: livedatapod
+        spec:
+          containers:
+            - name: alpine
+              image: alpine
+              command:
+                - sleep
+                - 3s
+
+```
+* Execute the below commands
+```
+# kubectl apply -f runmultipletimes.yml
+# kubectl get cronjobs.batch
+# kubectl get cronjobs.batch -w
+# kubectl get jobs.batch
+# kubectl get po
+# kubectl delete cronjobs.batch runmultipletimes.yml
+# kubectl get cronjobs.batch
+# kubectl get jobs.batch
+# kubectl get po              
+```
 
 # 5) Creating the ReplicaSet
 

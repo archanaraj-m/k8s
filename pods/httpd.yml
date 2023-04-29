@@ -1,0 +1,18 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: httpd-pod
+spec:
+  containers:
+    - name: httpd-cont
+      image: httpd:2
+      ports:
+        - containerPort: 80
+
+
+# kubectl apply -f httpd.yml
+# kubectl get po
+# Lets run a pod which run application on some port
+# Now if we want to access the application in container we can do port-forward (not recommended approach)
+# kubectl port-forward --address "0.0.0.0" httpd-pod 8080:80       

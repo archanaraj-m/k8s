@@ -13,3 +13,11 @@ spec:
           command:
             - sleep
             - 10s
+
+
+# kubectl apply -f hellojob.yml
+# kubectl get jobs -w
+# kubectl get po
+# kubectl delete jobs.batch hellojob
+# kubectl get jobs
+# kubectl get po           

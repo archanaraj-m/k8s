@@ -10,3 +10,10 @@ spec:
       args:
         - sleep
         - 1d
+
+# kubectl apply -f alpine.yml
+# kubectl get po
+# kubectl exec alpine -- pwd
+# kubectl exec alpine -- ls
+# Now if we want to execute a command in the container of alpine pod
+# kubectl exec alpine -it -- /bin/sh               
