@@ -15,7 +15,7 @@ exit and relogin
 * After successful installation re-login into your machine
 * After re-login try to get docker info $ docker info
 * Install CRI-Dockerd [ReferHere](https://github.com/Mirantis/cri-dockerd)
-* Run the below commands as root user in all the nodes
+# Run the below commands as root user in all the nodes
 
 
 # Run these commands as root
@@ -39,7 +39,7 @@ systemctl daemon-reload
 systemctl enable cri-docker.service
 systemctl enable --now cri-docker.socket
 ```
-# below commands executed only in master node 
+# Below commands executed only in master node in root user only
 
 * Installing kubadm, kubectl, kubelet [Referhere](https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/#installing-kubeadm-kubelet-and-kubectl)
 
@@ -53,7 +53,7 @@ sudo apt-get update
 sudo apt-get install -y kubelet kubeadm kubectl
 sudo apt-mark hold kubelet kubeadm kubectl
 ```
- Now create a cluster from a master node, use the command ``kubeadm init --pod-network-cidr "10.244.0.0/16" --cri-socket "unix:///var/run/cri-dockerd.sock"``
+* Now create a cluster from a master node, use the command ``kubeadm init --pod-network-cidr "10.244.0.0/16" --cri-socket "unix:///var/run/cri-dockerd.sock"``
 
 * After this command execution in the output one command is there in that add cri-socket this command is used for connecting nodes.
 
@@ -70,6 +70,8 @@ sudo apt-mark hold kubelet kubeadm kubectl
 
 * Now you need to run the following command in nodes, it will shows on master node.
 * Add nodes to the master use this command(it is in masternode and in that add cri socket)
+* This below command execute in another two nodes(means worker nodes) don't execute in master node.
+* Because it is ude for connecting worker nodes to the master node.
 ```
 kubeadm join 172.31.21.125:6443 --token tq7q1l.909bo8ioyn6snr1j \
         --cri-socket "unix:///var/run/cri-dockerd.sock" \

@@ -1,4 +1,4 @@
-Kubernetes (k8s) Activities (DAY02-27/APR/2023)
+Kubernetes (k8s) Activities (DAY03-28/APR/2023)
 ---------------------------------------------------------
 
 1) K8s Cluster Installation

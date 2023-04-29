@@ -19,9 +19,12 @@ Kubernetes also known as K8s, is an open-source system for automating deployment
 
 K8s described as Production grade container management
 
+# What Kubernetes can do?
+![preview](./k8s_images/img14.png)
+
 Kubernetes Architecture
 -------------------------
-
+![preview](./k8s_images/img12.png)
 * Pod
 A group of one or more containers.The smallest unit of k8s.The container has no ip address Pod has an IP address.
 If the pod fails, then that pod will not be created again, another new pod will be created and its IP will be different.

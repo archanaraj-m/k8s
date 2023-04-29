@@ -17,8 +17,8 @@ Kubernetes is composed of a number of components, each of which plays a specific
 [referhere](https://www.geeksforgeeks.org/kubernetes-architecture/)
 
 
-1. Setup k8s on single node using minikube and kind
-2. Run the Spring Pet Clinic
+# 2. Setup k8s on single node using minikube and kind
+  3. Run the Spring Pet Clinic
 * First we can create an instance(t2.medium) in that install docker
 ```
 curl -fsSL https://get.docker.com -o get-docker.sh
@@ -30,6 +30,8 @@ exit and relogin
 ```
 # After that install minikube
   [referhere](https://minikube.sigs.k8s.io/docs/start/)
+* This downloads the latest release of minikube for Linux amd64 architecture, installs it, and starts a single-node Kubernetes cluster using the Docker driver.
+ 
 ```
 curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
 sudo install minikube-linux-amd64 /usr/local/bin/minikube
@@ -44,6 +46,31 @@ kubectl expose deployment spc --type=NodePort --port=8080
 kubectl port-forward service/spc --address "0.0.0.0" 7080:8080
 ```
 ![preview](../k8s_images/img8.png)
+* Let's create a pod configuration file: vi spc.yml
+
+* This opens a new file in the vi text editor.
+
+* Paste the following YAML code into the file and save it
+```
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: spc
+spec:
+  containers:
+    - name: spc-cont
+      image: raji07/rajispringpetclinic:spc
+      ports: 
+        - containerPort: 8080
+```
+* Let's create pod 
+```
+kubectl create -f spc.yml
+kubectl get pods
+kubectl get pods -o wide
+```
+
 ![preview](../k8s_images/img9.png)
 ![preview](../k8s_images/img10.png)
 * Goto new tab copy the node public IP address <publicIP:7080>
@@ -65,4 +92,23 @@ kubectl apply -f spc.yml
 kubectl get po
 kubectl describe po
 ```
+* Let's create a pod configuration file: vi nop.yml
+
+* This opens a new file in the vi text editor.
+
+* Paste the following YAML code into the file and save it
+```
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: spc
+spec:
+  containers:
+    - name: spc-cont
+      image: raji07/rajispringpetclinic:spc
+      ports: 
+        - containerPort: 8080
+```
+
 ![preview](../k8s_images/img13.png)
