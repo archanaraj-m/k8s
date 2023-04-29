@@ -1,23 +1,18 @@
-Kubernetes (k8s) Activities (DAY01-26/APR/2023)
-# 1) Write a Pod Spec for Spring PetClinic and nopCommerce Applications
-
-* First we can create 3 instances with t2 medium
-* Next that 3 nodes 1 is master and another nodes are node1,node2.
-* In all 3 nodes install docker with docker commands
+k8s install commands:
+* First we can install docker in all nodes
+* Then install cri-dockered [Referhere](https://github.com/Mirantis/cri-dockerd)
+* Follow same commands in the above documentation.
 ```
 curl -fsSL https://get.docker.com -o get-docker.sh
 sh get-docker.sh
-sudo usermod -aG docker ubuntu
-docker info
-exit and relogin
+
+git clone https://github.com/Mirantis/cri-dockerd.git
+
+cd cri-dockerd
+mkdir bin
+VERSION=$((git describe --abbrev=0 --tags | sed -e 's/v//') || echo $(cat VERSION)-$(git log -1 --pretty='%h')) PRERELEASE=$(grep -q dev <<< "${VERSION}" && echo "pre" || echo "") REVISION=$(git log -1 --pretty='%h')
+go build -ldflags="-X github.com/Mirantis/cri-dockerd/version.Version='$VERSION}' -X github.com/Mirantis/cri-dockerd/version.PreRelease='$PRERELEASE' -X github.com/Mirantis/cri-dockerd/version.BuildTime='$BUILD_DATE' -X github.com/Mirantis/cri-dockerd/version.GitCommit='$REVISION'" -o cri-dockerd
 ```
-* After install docker in all 3 nodes exit and relogin because we can give usermod permissions.
-* After successful installation re-login into your machine
-* After re-login try to get docker info $ docker info
-* Install CRI-Dockerd [ReferHere](https://github.com/Mirantis/cri-dockerd)
-* Run the below commands as root user in all the nodes
-
-
 # Run these commands as root
 ###Install GO###
 ```
@@ -27,7 +22,6 @@ chmod +x ./installer_linux
 ./installer_linux
 source ~/.bash_profile
 
-git clone https://github.com/Mirantis/cri-dockerd.git
 cd cri-dockerd
 mkdir bin
 go build -o bin/cri-dockerd
@@ -88,62 +82,6 @@ kubeadm join 172.31.21.125:6443 --token tq7q1l.909bo8ioyn6snr1j \
 
 * After that create a manifest file with reference of kubernetes 
 [referhere](https://kubernetes.io/docs/concepts/overview/working-with-objects/kubernetes-objects/)
-* Then create a yml files for spc and nop
-  
-# 2) Execute the kubectl commands:
-   
-   ``kubectl get pods ``and ``kubectl describe pods``
-
-# manifest file for spc applications with use Pod spec   
-
-# spc.yml
----
-apiVersion: v1
-kind: Pod
-metadata:
-  name: spc
-spec:
-  containers:
-    - name: spc-cont
-      image: raji07/rajispringpetclinic:spc
-      ports: 
-        - containerPort: 8080
-
-![preview](../k8s_images/img5.png)
-* Then execute below commands
-```
-vi spc.yml
-kubectl apply -f spc.yml
-kubectl get pods
-kubectl describe pods/spc
-```
-* In that describe pod command we can see node2 IP address
-![preview](../k8s_images/img6.png)
-
-# # manifest file for nop commerce applications with use Pod spec 
-# nop.yml
----
-apiVersion: v1
-kind: Pod
-metadata:
-  name: nop
-spec:
-  containers:
-    - name: nopcont
-      image: raji07/rajeshwari-nopcommerce
-      ports:
-        - containerPort: 5000
-  
-
-* Then execute below commands
-```
-vi nop.yml
-kubectl apply -f nop.yml
-kubectl get pods
-kubectl describe pods/nop
-```
-* In that describe pod command we can see node2 IP address
-![preview](../k8s_images/img7.png)
-
+* Then create a yml files for any applications(ex.spc,nop,game of life)
 
 

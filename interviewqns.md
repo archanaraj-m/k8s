@@ -58,45 +58,23 @@ And, for every worker node, it is used to store the resource usage information.
 Kubectl stands for Kubernetes Command-line interface. It is a command-line tool for the Kubernetes platform to perform API calls.
 Kubectl is the main interface that allows users to create (and manage) individual objects or groups of objects inside a Kubernetes cluster.
 Kubernetes resources are defined by a manifest file written in YAML. When the manifest is deployed, an object is created that aims to reach the desired state within the cluster. From that point, the appropriate controller watches the object and updates the cluster’s existing state to match the desired state.
-
-k8s install commands:
-* First we can install docker in all nodes
-* then install cri-dockered
-
-```
-curl -fsSL https://get.docker.com -o get-docker.sh
-sh get-docker.sh
-
-git clone https://github.com/Mirantis/cri-dockerd.git
-
-cd cri-dockerd
-mkdir bin
-VERSION=$((git describe --abbrev=0 --tags | sed -e 's/v//') || echo $(cat VERSION)-$(git log -1 --pretty='%h')) PRERELEASE=$(grep -q dev <<< "${VERSION}" && echo "pre" || echo "") REVISION=$(git log -1 --pretty='%h')
-go build -ldflags="-X github.com/Mirantis/cri-dockerd/version.Version='$VERSION}' -X github.com/Mirantis/cri-dockerd/version.PreRelease='$PRERELEASE' -X github.com/Mirantis/cri-dockerd/version.BuildTime='$BUILD_DATE' -X github.com/Mirantis/cri-dockerd/version.GitCommit='$REVISION'" -o cri-dockerd
-
-# Run these commands as root
-###Install GO###
-wget https://storage.googleapis.com/golang/getgo/installer_linux
-chmod +x ./installer_linux
-./installer_linux
-source ~/.bash_profile
-
-cd cri-dockerd
-mkdir bin
-go build -o bin/cri-dockerd
-mkdir -p /usr/local/bin
-install -o root -g root -m 0755 bin/cri-dockerd /usr/local/bin/cri-dockerd
-cp -a packaging/systemd/* /etc/systemd/system
-sed -i -e 's,/usr/bin/cri-dockerd,/usr/local/bin/cri-dockerd,' /etc/systemd/system/cri-docker.service
-systemctl daemon-reload
-systemctl enable cri-docker.service
-systemctl enable --now cri-docker.socket
-```
-[Referhere](https://github.com/Mirantis/cri-dockerd)
-* Follow same commands in the above documentation.
-
-
+## Kubernetes Questions
+# distributed system kubernetes:
+Kubernetes provides you with a framework to run distributed systems resiliently. It takes care of scaling and failover for your application, provides deployment patterns, and more. For example: Kubernetes can easily manage a canary deployment for your system.
+# node:
+A Kubernetes node is a machine that runs containerized workloads as part of a Kubernetes cluster. A node can be a physical machine or a virtual machine, and can be hosted on-premises or in the cloud. A Kubernetes cluster can have a large number of nodes—recent versions support up to 5,000 nodes.
+# Cluster Kubernetes:
+What is a Kubernetes cluster? A Kubernetes cluster is a set of nodes that run containerized applications. Containerizing applications packages an app with its dependences and some necessary services. They are more lightweight and flexible than virtual machines.
+# What are the states in Kubernetes?
+There are three possible container states: Waiting , Running , and Terminated . To check the state of a Pod's containers, you can use kubectl describe pod <name-of-pod> .
+# What is stateful and stateless application in Kubernetes?
+Stored Data: If the webserver stores data in a backend manner and uses it to identify the user as an always-connected client, the service is Stateful. While in Stateless, the server does store data, but in a database to verify user/client whenever it needs to connect.
+# What does monolithic mean in Kubernetes?
+Similarly, a monolithic architecture suggests a single-tiered application where all different components from a single platform can be combined and used for a single program.
+# why we use odd number nodes in kubernetes?
+In order to facilitate availability of master services, they should be deployed with odd numbers (e.g. 3,5,7,9 etc.) so quorum (master node majority) can be maintained should one or more masters fail.
 
 # scaling up and down
 # scaling in and out
-# in k8s everthing stores in etcd controllers
+* In k8s everthing stores in etcd controllers
+  
