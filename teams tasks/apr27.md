@@ -2,22 +2,23 @@ Kubernetes (k8s) Activities (DAY02-27/APR/2023)
 --------------------------------------------------------- 
 
 # 1) Explain Kubernetes architecture
+
 Kubernetes – Cluster Architecture
+---------------------------------
 As can be seen in the diagram below, Kubernetes has a client-server architecture and has master and worker nodes, with the master being installed on a single Linux system and the nodes on many Linux workstations. 
 
-Kubernetes Components
+* Kubernetes Components
 Kubernetes is composed of a number of components, each of which plays a specific role in the overall system. These components can be divided into two categories:
-nodes: Each Kubernetes cluster requires at least one worker node, which is a collection of worker machines that make up the nodes where our container will be deployed.
-Control plane: The worker nodes and any pods contained within them will be under the control plane. 
+  * nodes: Each Kubernetes cluster requires at least one worker node, which is a collection of worker machines that make up the nodes where our  container will be deployed.
+  * Control plane: The worker nodes and any pods contained within them will be under the control plane. 
  
-
-Kubernetes Architecture
+ Kubernetes Architecture
 ![preview](../k8s_images/img12.png)
 [referhere](https://www.geeksforgeeks.org/kubernetes-architecture/)
 
 
-2. Setup k8s on single node using minikube and kind
-3. Run the Spring Pet Clinic
+1. Setup k8s on single node using minikube and kind
+2. Run the Spring Pet Clinic
 * First we can create an instance(t2.medium) in that install docker
 ```
 curl -fsSL https://get.docker.com -o get-docker.sh
