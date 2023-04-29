@@ -15,7 +15,7 @@ exit and relogin
 * After successful installation re-login into your machine
 * After re-login try to get docker info $ docker info
 * Install CRI-Dockerd [ReferHere](https://github.com/Mirantis/cri-dockerd)
-# Run the below commands as root user in all the nodes
+# Run the below commands as root user in all 3 nodes
 
 
 # Run these commands as root
@@ -83,7 +83,7 @@ kubeadm join 172.31.21.125:6443 --token tq7q1l.909bo8ioyn6snr1j \
 * For check the resources ``kubectl api-resources``
 
 
-![preview](./../k8s_images/img1.png)
+![preview](../k8s_images/img1.png)
 ![preview](../k8s_images/img2.png)
 ![preview](../k8s_images/img3.png)
 ![preview](../k8s_images/img4.png)

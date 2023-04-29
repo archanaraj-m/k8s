@@ -20,6 +20,7 @@ Kubernetes is composed of a number of components, each of which plays a specific
 # 2. Setup k8s on single node using minikube and kind
   3. Run the Spring Pet Clinic
 * First we can create an instance(t2.medium) in that install docker
+
 ```
 curl -fsSL https://get.docker.com -o get-docker.sh
 sh get-docker.sh
@@ -78,6 +79,8 @@ kubectl get pods -o wide
 ![preview](../k8s_images/img11.png)
 
 # kind
+# Setup k8s on single node using kind and Run the Spring Pet Clinic.
+
 [referhere](https://kind.sigs.k8s.io/docs/user/quick-start/#installation) in this see linux.
 
 * launch an instance(t2.medium) and in stall docker in that after that run this commands
@@ -85,14 +88,14 @@ kubectl get pods -o wide
 curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.18.0/kind-linux-amd64
 chmod +x ./kind
 sudo mv ./kind /usr/local/bin/kind
-kind create cluster
+kind create cluster     #with this command create the cluster in Kind 
 sudo snap install kubectl --classic
 vi spc.yml
 kubectl apply -f spc.yml
 kubectl get po
 kubectl describe po
 ```
-* Let's create a pod configuration file: vi nop.yml
+* Let's create a pod configuration file: vi spc.yml
 
 * This opens a new file in the vi text editor.
 
