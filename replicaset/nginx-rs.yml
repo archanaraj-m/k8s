@@ -41,3 +41,11 @@ spec:
           ports:
             - containerPort: 80
 
+# RS-Activity1 Create 3 nginx pods
+
+# kubectl apply -f nginx-rs.yml
+# kubectl get replicasets.apps
+# kubectl get po
+# kubectl describe rs
+# kubectl scale --replicas=5 rs/nginx-rs
+# kubectl get po

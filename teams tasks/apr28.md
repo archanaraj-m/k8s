@@ -1,7 +1,7 @@
 Kubernetes (k8s) Activities (DAY03-28/APR/2023)
 ---------------------------------------------------------
 
-1) K8s Cluster Installation
+# 1) K8s Cluster Installation
    a) kubeadm
    b) minikube
    c) kind
@@ -148,7 +148,7 @@ kubectl describe po
 
 # spc manifest file
 
-```
+```yml
 ---
 apiVersion: v1
 kind: Pod
@@ -170,7 +170,7 @@ kubectl describe po
 ```
 
 # nop manifest file
-```
+```yml
 ---
 apiVersion: v1
 kind: Pod
@@ -209,7 +209,7 @@ kubectl describe po
 * Following this yml file for Jobs
 * It's paste in ``vi hellojob.yml``
 
-```
+```yml
 ---
 apiVersion: batch/v1
 kind: Job
@@ -240,7 +240,7 @@ spec:
 * Follow the yml file for cronjob
 * Paste it in ``vi runmultipletimes.yml``
 
-```
+```yml
 ---
 apiVersion: batch/v1
 kind: CronJob
@@ -281,7 +281,7 @@ spec:
 * ReplicaSet is controller which maintains count of Pods as Desired State
 * Write manifest file and paste it in ``vi nginx-rs.yml``  
   
-```
+```yml
 ---
 apiVersion: apps/v1
 kind: ReplicaSet
@@ -317,3 +317,134 @@ kubectl get po
 * We can increase (scale out) as well decrease (scale in) the replica count
 
 # 6) Writing the LABELS and Selecting the LABELS using selector concept
+* Labels are key value pairs that can be attached as metadata to k8s objects.
+* Labels help in selecting/querying/filtering objects
+* Labels can be selected using
+     * equality based
+     * set based
+* Label Activity 1. Create a nginx pod with label
+  Lets create a nginx pod with label app: nginx
+
+```yml
+  ---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: labeldemo
+  labels:
+    app: nginx
+spec:
+  containers:
+    - name: nginx
+      image: nginx:1.23
+      ports:
+        - containerPort: 80
+
+```
+* execute below commnads
+```
+# kubectl apply -f labeldemo1.yml
+# kubectl get po --show-labels
+For manually create the labels means not in yml file in the above we can create label is app-nginx
+# kubectl run n1 --image=nginx --labels "app=nginx,component=web"
+# kubectl get po --show-labels
+# kubectl run n1 --image=nginx --labels "app=web,component=web"
+# kubectl get po --show-labels
+with using selector
+# kubectl get po --selctor "app=nginx" --show-labels
+# kubectl get po --selctor "app!=nginx" --show-labels
+# kubectl get po --selctor "component,app in (web)" --show-labels
+# kubectl get po --selctor "component,app in (web,nginx)" --show-labels
+# kubectl get po --show-labels
+# same as it is in jenkins also we created labels
+```
+
+* Create 5 pods with label app=jenkins
+```yml
+---
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: jenkins-rs
+spec:
+  minReadySeconds: 5
+  replicas: 5
+  selector:
+    matchLabels:
+      app: jenkins
+  template:
+    metadata:
+      name: jenkins
+      labels:
+        app: jenkins
+    spec:
+      containers:
+        - name: jenkins
+          image: jenkins/jenkins:lts-jdk11
+          ports:
+            - containerPort: 8080
+        - name: alpine
+          image: alpine:3
+          args:
+            - sleep
+            - 1d
+```
+* Jenkins rs didnt create any pod as there were 5 pods matching label selector. we had deleted one pod which lead to creation of jenkins pod from 
+  the template section in above manifest            
+* execute beloew commands for check
+```
+# kubectl get po --show-labels
+# kubectl run n3 --image=nginx --labels "app=jenkins"
+# kubectl get po --show-labels
+# kubectl run n4 --image=nginx --labels "app=jenkins"
+# kubectl get po --show-labels
+# kubectl apply -f jenkins-label.yml
+# kubectl get rs jenkins-rs
+# kubectl get po
+# kubectl delete po n4
+# kubectl get po  
+```
+* ReplicationController only allows equality based selectors where as ReplicaSet supports set based selectors also
+* set based example yml file
+
+```yml
+---
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: setbased
+  labels:
+    purpose: understanding
+    concept: setbased
+spec:
+  minReadySeconds: 2
+  replicas: 3
+  selector:
+    matchExpressions:
+      - key: app
+        operator: In
+        values:
+          - nginx
+          - web
+      - key: env
+        operator: NotIn
+        values:
+          - prod
+          - uat
+      - key: failing
+        operator: DoesNotExist
+        values:
+  template:
+    metadata:
+      name: nginx
+      labels:
+        app: nginx
+        env: dev
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:1.23
+          ports:
+            - containerPort: 80
+```
+            

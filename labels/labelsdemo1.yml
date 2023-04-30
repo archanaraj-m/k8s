@@ -23,4 +23,5 @@ spec:
 # kubectl get po --selctor "app!=nginx" --show-labels
 # kubectl get po --selctor "component,app in (web)" --show-labels
 # kubectl get po --selctor "component,app in (web,nginx)" --show-labels
-#same as it is in jenkins also we created labels
+# kubectl get po --show-labels
+# same as it is in jenkins also we created labels

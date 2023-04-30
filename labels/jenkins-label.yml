@@ -26,12 +26,13 @@ spec:
             - sleep
             - 1d
 
-# RS-Activity2 Create 5 Pods with jenkins and alpine in one Pod
-
-# kubectl apply -f jenkins-rs.yml
-# kubectl get rs
+# kubectl get po --show-labels
+# kubectl run n3 --image=nginx --labels "app=jenkins"
+# kubectl get po --show-labels
+# kubectl run n4 --image=nginx --labels "app=jenkins"
+# kubectl get po --show-labels
+# kubectl apply -f jenkins-label.yml
+# kubectl get rs jenkins-rs
 # kubectl get po
-# kubectl describe rs
-# kubectl delete po <pod id or name>
-# kubectl describe rs
-# kubectl get rs
+# kubectl delete po n4
+# kubectl get po
