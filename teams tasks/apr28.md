@@ -203,8 +203,18 @@ kubectl describe po
 
 # 3) Writing the Manifest File for Game of Life App.
 
-```
-
+```yml
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: gameoflife
+spec:
+  containers:
+    - name: gol
+      image: shravanipranay/shravani:latest
+      ports:
+        containerPort: 8080
 ```
 
 
@@ -438,7 +448,7 @@ with using selector
 # kubectl get po --show-labels
 # same as it is in jenkins also we created labels
 ```
-
+![preview](../k8s_images/k8s26.png)
 * Create 5 pods with label app=jenkins
 ```yml
 ---
