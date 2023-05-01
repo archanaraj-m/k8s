@@ -7,7 +7,12 @@ Kubernetes (k8s) Activities (DAY03-28/APR/2023)
    c) kind
 
 # a) kubeadm
+* Kubeadm is a tool built to provide kubeadm init and kubeadm join as best-practice "fast paths" for creating Kubernetes clusters.
 
+* kubeadm performs the actions necessary to get a minimum viable cluster up and running. By design, it cares only about bootstrapping, not about   provisioning machines.
+
+kubeadm instalation
+--------------------
 * First we can create 2 instances with t2 medium
 * Next that 2 nodes 1 is masternode and another node1(workernode)
 * In this 2 nodes install docker with docker commands
@@ -66,6 +71,8 @@ sudo apt-mark hold kubelet kubeadm kubectl
 ![preview](../k8s_images/img3.png)
 
 # b) minikube
+* A Kubernetes cluster can be deployed on either physical or virtual machines. To get started with Kubernetes development, you can use Minikube. Minikube is a lightweight Kubernetes implementation that creates a VM on your local machine and deploys a simple cluster containing only one node. Minikube is available for Linux, macOS, and Windows systems. The Minikube CLI provides basic bootstrapping operations for working with your cluster, including start, stop, status, and delete.
+[Referhere](https://kubernetes.io/docs/tutorials/hello-minikube/)
 
 * First we can create an instance(t2.medium) in that install docker
 
@@ -100,7 +107,7 @@ kubectl port-forward service/spc --address "0.0.0.0" 7080:8080
 * This opens a new file in the vi text editor.
 
 * Paste the following YAML code into the file and save it
-```
+```yml
 ---
 apiVersion: v1
 kind: Pod
@@ -127,6 +134,8 @@ kubectl get pods -o wide
 ![preview](../k8s_images/img11.png)
 
 # c)kind
+* kind is a tool for running local Kubernetes clusters using Docker container “nodes”.
+kind was primarily designed for testing Kubernetes itself, but may be used for local development or CI.
 [referhere](https://kind.sigs.k8s.io/docs/user/quick-start/#installation) in this see linux.
 
 * launch an instance(t2.medium) and in stall docker in that after that run this commands
@@ -204,7 +213,6 @@ kubectl describe po
    * Job: Run an activity/script to completion
    * CronJob: Run an activity/script to completion at specific time period or intervals.
 # Now we can create Jobs
-* For jobs restartPolicy cannot be Always as job will never finish
 * Running job and waiting for completion
 * Following this yml file for Jobs
 * It's paste in ``vi hellojob.yml``
@@ -216,17 +224,25 @@ kind: Job
 metadata:
   name: hellojob
 spec:
+  backoffLimit: 5
   template:
     metadata:
       name: jobpod
     spec:
+      restartPolicy: OnFailure
       containers:
-        - image: alpine
+        - name: alpine  
+          image: alpine
           command:
             - sleep
             - 10s
 ```
 * Execute the below commands and check the jobs time period in between run the jobs commands again.
+![preview](../k8s_images/k8s15.png)
+* The above error came for we didn't give restart policy and backoffLimit also
+* Jobs have backoffLimit to limit number of restarts and activeDeadline seconds to limit timeperiod of execution.
+* For jobs restartPolicy cannot be Always as job will never finish,so we can give that mandatory for jobs.
+
 ```
 # kubectl apply -f hellojob.yml
 # kubectl get jobs -w
@@ -247,6 +263,7 @@ kind: CronJob
 metadata:
   name: periodicjob
 spec:
+  backoffLimit: 2
   schedule: '* * * * *' 
   jobTemplate:
     metadata:
@@ -256,6 +273,7 @@ spec:
         metadata:
           name: livedatapod
         spec:
+          restartPolicy: OnFailure
           containers:
             - name: alpine
               image: alpine
