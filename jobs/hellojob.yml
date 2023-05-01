@@ -4,7 +4,8 @@ kind: Job
 metadata:
   name: hellojob
 spec:
-  backoffLimit: 2
+  backoffLimit: 5
+  activeDeadlineSeconds: 50
   template:
     metadata:
       name: jobpod

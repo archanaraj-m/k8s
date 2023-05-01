@@ -4,7 +4,6 @@ kind: CronJob
 metadata:
   name: periodicjob
 spec:
-  backoffLimit: 2
   schedule: '* * * * *' 
   jobTemplate:
     metadata:
@@ -28,7 +27,7 @@ spec:
 # kubectl get cronjobs.batch -w
 # kubectl get jobs.batch
 # kubectl get po
-# kubectl delete cronjobs.batch runmultipletimes.yml
+# kubectl delete -f runmultipletimes.yml
 # kubectl get cronjobs.batch
 # kubectl get jobs.batch
 # kubectl get po              

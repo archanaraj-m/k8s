@@ -224,7 +224,8 @@ kind: Job
 metadata:
   name: hellojob
 spec:
-  backoffLimit: 5
+  backoffLimit: 2
+  activeDeadlineSeconds: 100
   template:
     metadata:
       name: jobpod
@@ -242,7 +243,7 @@ spec:
 * The above error came for we didn't give restart policy and backoffLimit also
 * Jobs have backoffLimit to limit number of restarts and activeDeadline seconds to limit timeperiod of execution.
 * For jobs restartPolicy cannot be Always as job will never finish,so we can give that mandatory for jobs.
-
+![preview](../k8s_images/k8s16.png)
 ```
 # kubectl apply -f hellojob.yml
 # kubectl get jobs -w
@@ -251,9 +252,13 @@ spec:
 # kubectl get jobs
 # kubectl get po 
 ```
+* For delete the jobs
+![preview](../k8s_images/k8s17.png)
+
 # Now we can create the CronJob
 * Cronjob manifest which we have written create a job every minute and waits for completion
 * Follow the yml file for cronjob
+![preview](../k8s_images/k8s18.png)
 * Paste it in ``vi runmultipletimes.yml``
 
 ```yml
@@ -263,7 +268,6 @@ kind: CronJob
 metadata:
   name: periodicjob
 spec:
-  backoffLimit: 2
   schedule: '* * * * *' 
   jobTemplate:
     metadata:
@@ -289,11 +293,24 @@ spec:
 # kubectl get cronjobs.batch -w
 # kubectl get jobs.batch
 # kubectl get po
-# kubectl delete cronjobs.batch runmultipletimes.yml
+```
+* Again execute this commands
+```
+# kubectl get cronjobs.batch
+# kubectl get jobs.batch
+# kubectl get po
+```
+* Then the jobs are created again in every one minute because we can give the cron job time  every minute so it's created at every minute
+![preview](../k8s_images/k8s19.png)
+* Next delete the cronjob,if not deleted it's run every minute so i deleted that with use of below commands
+```
+# kubectl delete -f runmultipletimes.yml
 # kubectl get cronjobs.batch
 # kubectl get jobs.batch
 # kubectl get po              
 ```
+* All jobs,pods are deleted
+![preview](../k8s_images/k8s20.png)
 
 # 5) Creating the ReplicaSet
 * ReplicaSet is controller which maintains count of Pods as Desired State
@@ -327,12 +344,57 @@ spec:
 * Execute below commands
 ```
 kubectl apply -f nginx-rs.yml
-kubectl get replicasets.app
+kubectl get replicasets.apps
 kubectl get po
+kubectl describe rs
 ```
+![preview](../k8s_images/k8s21.png)
 * Let's change the replica count ``kubectl scale --replicas=5 rs/nginx-rs``
 * Next check it with ``kubectl get po``
+![preview](../k8s_images/k8s22.png)
 * We can increase (scale out) as well decrease (scale in) the replica count
+* Create 5 Pods with jenkins and alpine in one Pod
+```yml
+---
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: jenkins-rs
+spec:
+  minReadySeconds: 5
+  replicas: 5
+  selector:
+    matchLabels:
+      app: jenkins
+  template:
+    metadata:
+      name: jenkins
+      labels:
+        app: jenkins
+    spec:
+      containers:
+        - name: jenkins
+          image: jenkins/jenkins:lts-jdk11
+          ports:
+            - containerPort: 8080
+        - name: alpine
+          image: alpine:3
+          args:
+            - sleep
+            - 1d
+```
+* execute this commands
+```
+# kubectl apply -f jenkins-rs.yml
+# kubectl get rs
+# kubectl get po
+# kubectl describe rs
+```
+![preview](../k8s_images/k8s23.png)
+* deleting the pod with this command  ``kubectl delete po <pod id or name>``  
+* After deleting the pod replica will create again 
+![preview](../k8s_images/k8s24.png)
+![preview](../k8s_images/k8s25.png)
 
 # 6) Writing the LABELS and Selecting the LABELS using selector concept
 * Labels are key value pairs that can be attached as metadata to k8s objects.
