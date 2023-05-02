@@ -6,6 +6,6 @@ metadata:
 spec:
   containers:
     - name: gol
-      image: shravanipranay/shravani:latest
+      image: archanaraj/gol:333
       ports:
         containerPort: 8080
