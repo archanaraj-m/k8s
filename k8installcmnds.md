@@ -50,9 +50,7 @@ sudo apt-mark hold kubelet kubeadm kubectl
 
  ![preview](./k8s_images/img3.png)
 
-* After this command execution in the output one command is there in that add cri-socket this command is used for connecting nodes.
-
-
+* After this command execution in the output the following commands are came.
 * To start using your cluster, you need to run the following as a regular user(ubuntu user)
 * below commands execute only in master node 
   ```
@@ -64,12 +62,11 @@ sudo apt-mark hold kubelet kubeadm kubectl
 
   ```
  ![preview](./k8s_images/img4.png)
-
-
 * Now you need to run the following command in nodes, it will shows on master node.
 * Add nodes to the master use this command(it is in masternode and in that add cri socket)
 * This below command execute in another two nodes(means worker nodes) don't execute in master node.
-* Because it is ude for connecting worker nodes to the master node.
+* Because it is use for connecting worker nodes to the master node.
+* In the kubeadm join(it is in the output of kubeadm init....sock command) command we can add this ``--cri-socket "unix:///var/run/cri-dockerd.sock"`` like see below command
 ```
 kubeadm join 172.31.21.125:6443 --token tq7q1l.909bo8ioyn6snr1j \
         --cri-socket "unix:///var/run/cri-dockerd.sock" \

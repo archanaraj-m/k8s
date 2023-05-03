@@ -225,7 +225,7 @@ spec:
 # Now we can create Jobs
 * Running job and waiting for completion
 * Following this yml file for Jobs
-* It's paste in ``vi hellojob.yml``
+* It's paste in ``vi job.yml``
 
 ```yml
 ---
@@ -235,7 +235,7 @@ metadata:
   name: hellojob
 spec:
   backoffLimit: 2
-  activeDeadlineSeconds: 100
+  activeDeadlineSeconds: 60
   template:
     metadata:
       name: jobpod
@@ -254,6 +254,7 @@ spec:
 * Jobs have backoffLimit to limit number of restarts and activeDeadline seconds to limit timeperiod of execution.
 * For jobs restartPolicy cannot be Always as job will never finish,so we can give that mandatory for jobs.
 ![preview](../k8s_images/k8s16.png)
+* i can Give active deadline seconds 60 so the pod will be shown completed after 60s .
 ```
 # kubectl apply -f hellojob.yml
 # kubectl get jobs -w
@@ -362,6 +363,7 @@ kubectl describe rs
 * Let's change the replica count ``kubectl scale --replicas=5 rs/nginx-rs``
 * Next check it with ``kubectl get po``
 ![preview](../k8s_images/k8s22.png)
+![preview](../k8s_images/k8s27.png)
 * We can increase (scale out) as well decrease (scale in) the replica count
 * Create 5 Pods with jenkins and alpine in one Pod
 ```yml
