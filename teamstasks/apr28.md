@@ -495,6 +495,8 @@ spec:
 # kubectl get po  
 ```
 * ReplicationController only allows equality based selectors where as ReplicaSet supports set based selectors also
+![preview](./../k8s_images/k8s27.png)
+
 * set based example yml file
 
 ```yml
