@@ -363,7 +363,7 @@ kubectl describe rs
 * Let's change the replica count ``kubectl scale --replicas=5 rs/nginx-rs``
 * Next check it with ``kubectl get po``
 ![preview](../k8s_images/k8s22.png)
-![preview](../k8s_images/k8s27.png)
+![preview](../k8s_images/k8s26.png)
 * We can increase (scale out) as well decrease (scale in) the replica count
 * Create 5 Pods with jenkins and alpine in one Pod
 ```yml
@@ -403,11 +403,9 @@ spec:
 # kubectl describe rs
 ```
 ![preview](../k8s_images/k8s23.png)
-* deleting the pod with this command  ``kubectl delete po <pod id or name>``  
+* deleting the pod with this command  ``kubectl delete pod <pod id or name>``  
 * After deleting the pod replica will create again 
 ![preview](../k8s_images/k8s24.png)
-![preview](../k8s_images/k8s25.png)
-
 # 6) Writing the LABELS and Selecting the LABELS using selector concept
 * Labels are key value pairs that can be attached as metadata to k8s objects.
 * Labels help in selecting/querying/filtering objects
@@ -450,7 +448,7 @@ with using selector
 # kubectl get po --show-labels
 # same as it is in jenkins also we created labels
 ```
-![preview](../k8s_images/k8s26.png)
+![preview](../k8s_images/k8s25.png)
 * Create 5 pods with label app=jenkins
 ```yml
 ---
