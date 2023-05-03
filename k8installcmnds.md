@@ -1,18 +1,20 @@
 k8s install commands:
-* First we can install docker in all nodes
-* Then install cri-dockered [Referhere](https://github.com/Mirantis/cri-dockerd)
-* Follow same commands in the above documentation.
+
+* First we can create 3 instances with t2 medium
+* Next that 3 nodes 1 is master and another nodes are node1,node2.
+* In all 3 nodes install docker with docker commands
 ```
 curl -fsSL https://get.docker.com -o get-docker.sh
 sh get-docker.sh
-
-git clone https://github.com/Mirantis/cri-dockerd.git
-
-cd cri-dockerd
-mkdir bin
-VERSION=$((git describe --abbrev=0 --tags | sed -e 's/v//') || echo $(cat VERSION)-$(git log -1 --pretty='%h')) PRERELEASE=$(grep -q dev <<< "${VERSION}" && echo "pre" || echo "") REVISION=$(git log -1 --pretty='%h')
-go build -ldflags="-X github.com/Mirantis/cri-dockerd/version.Version='$VERSION}' -X github.com/Mirantis/cri-dockerd/version.PreRelease='$PRERELEASE' -X github.com/Mirantis/cri-dockerd/version.BuildTime='$BUILD_DATE' -X github.com/Mirantis/cri-dockerd/version.GitCommit='$REVISION'" -o cri-dockerd
+sudo usermod -aG docker ubuntu
+docker info
+exit and relogin
 ```
+* After install docker in all 3 nodes exit and relogin because we can give usermod permissions.
+* After successful installation re-login into your machine
+* After re-login try to get docker info $ docker info
+# Run the below commands as root user in all 3 nodes
+
 # Run these commands as root
 ###Install GO###
 ```
@@ -21,7 +23,7 @@ wget https://storage.googleapis.com/golang/getgo/installer_linux
 chmod +x ./installer_linux
 ./installer_linux
 source ~/.bash_profile
-
+git clone https://github.com/Mirantis/cri-dockerd.git
 cd cri-dockerd
 mkdir bin
 go build -o bin/cri-dockerd
@@ -32,14 +34,6 @@ sed -i -e 's,/usr/bin/cri-dockerd,/usr/local/bin/cri-dockerd,' /etc/systemd/syst
 systemctl daemon-reload
 systemctl enable cri-docker.service
 systemctl enable --now cri-docker.socket
-```
-![preview](./k8s_images/img1.png)
-![preview](./k8s_images/img2.png)
-# below commands executed only in master node in root user only
-
-* Installing kubadm, kubectl, kubelet [Referhere](https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/#installing-kubeadm-kubelet-and-kubectl)
-
-```
 cd ~
 sudo apt-get update
 sudo apt-get install -y apt-transport-https ca-certificates curl
@@ -49,6 +43,9 @@ sudo apt-get update
 sudo apt-get install -y kubelet kubeadm kubectl
 sudo apt-mark hold kubelet kubeadm kubectl
 ```
+-------------------till here in 3 nodes only-----------
+
+* This command run in master node only
 * Now create a cluster from a master node, use the command ``kubeadm init --pod-network-cidr "10.244.0.0/16" --cri-socket "unix:///var/run/cri-dockerd.sock"``
 
  ![preview](./k8s_images/img3.png)
@@ -57,16 +54,17 @@ sudo apt-mark hold kubelet kubeadm kubectl
 
 
 * To start using your cluster, you need to run the following as a regular user(ubuntu user)
+* below commands execute only in master node 
   ```
   exit
   mkdir -p $HOME/.kube
   sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
   sudo chown $(id -u):$(id -g) $HOME/.kube/config
-  kubectl get nodes
+  kubectl apply -f https://github.com/flannel-io/flannel/releases/latest/download/kube-flannel.yml
+
   ```
  ![preview](./k8s_images/img4.png)
 
-* Setup kubeconfig, install flannel use the command ``kubectl apply -f https://github.com/flannel-io/flannel/releases/latest/download/kube-flannel.yml``
 
 * Now you need to run the following command in nodes, it will shows on master node.
 * Add nodes to the master use this command(it is in masternode and in that add cri socket)
@@ -83,7 +81,7 @@ kubeadm join 172.31.21.125:6443 --token tq7q1l.909bo8ioyn6snr1j \
 * For check the resources ``kubectl api-resources``
 
 * After that create a manifest file with reference of kubernetes 
-[referhere](https://kubernetes.io/docs/concepts/overview/working-with-objects/kubernetes-objects/)
+[referhere](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.27/)
 * Then create a yml files for any applications(ex.spc,nop,game of life)
 
 ## Class Exercises:
