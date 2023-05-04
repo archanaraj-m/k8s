@@ -76,8 +76,25 @@ Stored Data: If the webserver stores data in a backend manner and uses it to ide
 Similarly, a monolithic architecture suggests a single-tiered application where all different components from a single platform can be combined and used for a single program.
 # why we use odd number nodes in kubernetes?
 In order to facilitate availability of master services, they should be deployed with odd numbers (e.g. 3,5,7,9 etc.) so quorum (master node majority) can be maintained should one or more masters fail.
-
+* In k8s everthing stores in etcd controllers
 # scaling up and down
 # scaling in and out
-* In k8s everthing stores in etcd controllers
-  
+
+## Please ensure that, all the Classroom K8S Concepts covered so far, have to be practiced well both Technically and Theoretically as well for Interviews perspective like:
+
+* Pods / Containers
+* 
+
+* Jobs / CronJobs
+
+* ReplicaSets
+
+* Deployment
+
+* Service / Headless Service
+
+* Volumes / Persistent Volumes / Persistent Volume Claims
+
+* Stateful Sets and
+
+* Namespaces etc.  
