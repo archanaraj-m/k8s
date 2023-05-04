@@ -12,12 +12,43 @@ Kubernetes practise:
         * Vertical Scaling
         * Horizontal Scaling
    * K8s can do both horizontal and vertical scaling of containers
+* Zero-Down time Deployments
+    * K8s can handle deployments with near    zero-down time deployments
+    * K8s can handle rollout (new version) and roll back (undo new version => previous version)
+* K8s is described as Production grade Container management 
 
 Kubernetes
 ----------
-Kubernetes also known as K8s, is an open-source system for automating deployment, scaling, and management of containerized applications.
+* Kubernetes also known as K8s, is an open-source system for automating deployment, scaling, and management of containerized applications.
 
-K8s described as Production grade container management
+* K8s described as Production grade container management
+
+History
+-------
+
+* Google had a history of running everything on containers.
+* To manage these containers, Google has developed container management tools (inhouse)
+      * Borg
+      * Omega
+* With Docker publicizing containers, With the experience in running and managing containers, Google has started a project Kubernetes (developed in Go) and then handed it over to Cloud Native Container Foundation (CNCF)
+* Competetiors
+     * Apache Mesos
+     * Hashicorp Nomad
+     * Docker Swarm
+     * But K8s is clear winner
+Terms
+-----
+* Distributed System
+* Node
+* Cluster
+* State
+* Stateful Applications
+* Stateless Applications
+* Monolith
+* Microservices
+* Desired State
+* Declarative vs Imperative
+* Pet Vs Cattle
 
 # What Kubernetes can do?
 ![preview](./k8s_images/img14.png)
@@ -25,39 +56,81 @@ K8s described as Production grade container management
 Kubernetes Architecture
 -------------------------
 ![preview](./k8s_images/img12.png)
-* Pod
-A group of one or more containers.The smallest unit of k8s.The container has no ip address Pod has an IP address.
-If the pod fails, then that pod will not be created again, another new pod will be created and its IP will be different.
-* kubelet
-Kublet is a small, lightweight Kubernetes node agent that runs on each node in a Kubernetes cluster.
-It's responsible for managing the nodes and communicating with the Kubernetes master.
-It's also responsible for making sure that the containers running on the nodes are healthy and running correctly.
-* Kube-proxy
-Kube-proxy is a network proxy service for Kubernetes that is responsible for routing traffic to different services within the cluster.
-It is responsible for forwarding traffic from one service to another, allowing for communication between different components of the Kubernetes cluster.
-* Service
-In Kubernetes, a service is an object that abstracts the underlying infrastructure and provides a unified access point for the applications that are running on the cluster.
-Services allow the applications to communicate with each other and are used to provide load balancing and service discovery.
-* cluster
-In Kubernetes, a cluster is a set of nodes (physical or virtual machines) that are connected and managed by the Kubernetes software.
-* Container Engine(Docker, Rocket, ContainerD)
-A container engine is a software system that enables applications and services to be packaged and run in an isolated environment.
-Docker, Rocket, and Container are all examples of container engines that are used to run applications in containers.
-* API Server (Application Programeble Interface)
+![preview](./k8s_images/img29.png)
+
+Kubernetes Components
+----------------------
+[ReferHere](https://directdevops.blog/2019/10/10/kubernetes-master-and-node-components/)
+
+# Control plane components (Master Node Components)
+      kube-api server
+      etcd (*)
+      kube-scheduler
+      controller manager
+      cloud controller manager
+
+API Server (Application Programeble Interface)
+------------
 The API Server is the entry point of K8S Services.
 The Kubernetes API server receives the REST commands which are sent by the user.
 After receiving them, it validates the REST requests, processes them, and then executes them. After the execution of REST commands, the resulting state of a cluster is saved in 'etcd' as a distributed key-value store.
 This API server is meant to scale automatically as per load.
-* ETCD
+
+ETCD
+----
 etcd is a consistent and highly-available key value store used as Kubernetes’ backing store for all cluster data. If your Kubernetes cluster uses etcd as its backing store, make sure you have a back up plan for those data. You can find in-depth information about etcd in the official documentation.
 
-* Controller Manager
+Controller Manager
+------------------
 The Kubernetes Controller Manager (also called kube-controller-manager) is a daemon that acts as a continuous control loop in a Kubernetes cluster.
 The controller monitors the current state of the cluster via calls made to the API Server and changes the current state to match the desired state described in the cluster’s declarative configuration.
-* Scheduler
+
+Scheduler
+----------
 The scheduler in a master node schedules the tasks for the worker nodes.
-And, for every worker node, it is used to store the resource usage information.
-* What is kubectl stand for?
+And, for every worker node, it is used to store the resource usage information.      
+
+# Node Components
+      kubelet
+      kube-proxy
+      Container run time (*)
+
+Pod
+----
+A group of one or more containers.The smallest unit of k8s.The container has no ip address Pod has an IP address.
+If the pod fails, then that pod will not be created again, another new pod will be created and its IP will be different.
+
+kubelet
+--------
+Kublet is a small, lightweight Kubernetes node agent that runs on each node in a Kubernetes cluster.
+It's responsible for managing the nodes and communicating with the Kubernetes master.
+It's also responsible for making sure that the containers running on the nodes are healthy and running correctly.
+
+Kube-proxy
+----------
+Kube-proxy is a network proxy service for Kubernetes that is responsible for routing traffic to different services within the cluster.
+It is responsible for forwarding traffic from one service to another, allowing for communication between different components of the Kubernetes cluster.
+
+Container Runtime
+-----------------
+Container technology to be used in k8s cluster
+in our case it is docker.
+
+Service
+-------
+In Kubernetes, a service is an object that abstracts the underlying infrastructure and provides a unified access point for the applications that are running on the cluster.
+Services allow the applications to communicate with each other and are used to provide load balancing and service discovery.
+
+cluster
+-------
+In Kubernetes, a cluster is a set of nodes (physical or virtual machines) that are connected and managed by the Kubernetes software.
+
+Container Engine(Docker, Rocket, ContainerD)
+-----------------
+A container engine is a software system that enables applications and services to be packaged and run in an isolated environment.
+Docker, Rocket, and Container are all examples of container engines that are used to run applications in containers.
+
+# What is kubectl stand for?
 Kubectl stands for Kubernetes Command-line interface. It is a command-line tool for the Kubernetes platform to perform API calls.
 Kubectl is the main interface that allows users to create (and manage) individual objects or groups of objects inside a Kubernetes cluster.
 Kubernetes resources are defined by a manifest file written in YAML. When the manifest is deployed, an object is created that aims to reach the desired state within the cluster. From that point, the appropriate controller watches the object and updates the cluster’s existing state to match the desired state.
