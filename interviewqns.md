@@ -156,7 +156,12 @@ In order to facilitate availability of master services, they should be deployed 
 ## Please ensure that, all the Classroom K8S Concepts covered so far, have to be practiced well both Technically and Theoretically as well for Interviews perspective like:
 
 * Pods / Containers
-* 
+* containers:Containers are small, fast and portable because unlike a virtual machine, containers do not need to include a guest OS in every instance and can instead simply leverage the features and resources of the host OS.[referhere](https://www.ibm.com/topics/containers)
+  * Benefits of containers
+      *  Lightweight
+      *  Portable and platform-independent
+      *  Supports modern development and architecture
+      *  Improves utilization
 
 * Jobs / CronJobs
 
