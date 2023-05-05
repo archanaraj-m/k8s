@@ -70,7 +70,7 @@ sudo apt-mark hold kubelet kubeadm kubectl
 * Now you need to run the following command in nodes, it will shows on master node.
 * Add nodes to the master use this command(it is in masternode and in that add cri socket)
 * This below command execute in another two nodes(means worker nodes) don't execute in master node.
-* Because it is ude for connecting worker nodes to the master node.
+* Because it is use for connecting worker nodes to the master node.
 ```
 kubeadm join 172.31.21.125:6443 --token tq7q1l.909bo8ioyn6snr1j \
         --cri-socket "unix:///var/run/cri-dockerd.sock" \

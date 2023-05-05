@@ -1,17 +1,37 @@
+headless service file for mysql
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-svc
+  labels:
+    app: mysql
+spec:
+  ports:
+    - port: 3306 
+  clusterIP: None
+  selector:
+    app: mysql    
+  
+
+---
 apiVersion: apps/v1
 kind:	StatefulSet
 metadata:
   name: mysql
   label:
-    name: mysql
+    app: mysql
 spec:
-  replicas: 1 
+  replicas: 1
+  serviceName: mysql-svc 
   selector:
     matchLabels:
-      name: mysql
+      app: mysql
   template:
     metadata:
       name: mysql
+      labels:
+        app: mysql
     spec:
       containers:
         - name: mysql
@@ -25,10 +45,44 @@ spec:
               value: password  
             - name: MYSQL_DATABASE
               value: students
-        ports:
-          - containerPort: 8080
-        volumeMounts:
-          mountPath: /var/lib/mysql
-          name: mysql
+          ports:
+            - containerPort: 3306
+          volumeMounts:
+            - name: mysql
+              mountPath: /var/lib/mysql
+          volumes:
+            name: mysql
 
+
+
+Create a Headless Service to interact with nopCommerce with MySQL
+
+
+---
+apiVersion: v1
+kind: Service
+metadata: 
+  name: mysql-svc
+spec:
+  selector:
+    app: mysql
+  ports:
+    - name: mysql
+        port: 3306
+        targetPort: 32000  
+
+            
+---
+apiVersion: v1
+kind: Service
+metadata: 
+  name: nop
+spec:
+  selector:
+    app: nop
+  ports:
+    - name: nop 
+        port: 5000
+        targetPort: 32000 
+  type: LoadBalancer         
 

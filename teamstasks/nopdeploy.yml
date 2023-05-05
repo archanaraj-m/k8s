@@ -1,25 +1,24 @@
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata: 
-  name: nop
+  name: nop-dp
+  labels:
+    app: nop
 spec:
-  containers:
-    - name: nopcont
-      image: archanaraj/nop:latest
-      ports:
-        - containerPort: 5000
-      replicas: 1
-      selector:
-        matchLabels:
-          name: nop
-      template: 
-        metadata:
-          name: nop
-        spec:
-          containers:
-            - name: nop
-            - containerPort: 5000        
-        livenessProbe:
-          httpGet:
-            path: /
-
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nop
+  template: 
+    metadata:
+      name: nop
+      labels:
+        app: nop
+    spec:
+      containers:
+      - name: nopcont
+        image: archanaraj/nop:latest
+        ports:
+        - containerPort: 5000   
+  
