@@ -42,12 +42,14 @@ Terms
 * Node
 * Cluster
 * State
-* Stateful Applications
-* Stateless Applications
-* Monolith
-* Microservices
-* Desired State
-* Declarative vs Imperative
+* Stateful Applications:If we can mount(mount means copy) the volumes it is stateless applications.
+* Stateless Applications:If we can't mount the volumes it is statefull applications.
+* Monolith:all in one srever means the application run in one server only i.e monolith.
+* Microservices:the application devided in to the small parts(means micro)then run i.e microservices. 
+* Desired State:what we want in the application i.e desired state means if we can give 3 replicas it's created 3 replicas i.e desired state.(what we can give i.e DS)
+* Desired state is one of the core concepts of Kubernetes. Through a declarative or an imperative API (I will come back to this notion later) you describe the state of the objects (Pod, ReplicatSet, Deployment, …) that will run the containers.
+* Declarative vs Imperative:declarative means write manifests file.
+* Imperative means execute in commandline we use commands for deployment
 * Pet Vs Cattle
 
 # What Kubernetes can do?
@@ -94,11 +96,6 @@ And, for every worker node, it is used to store the resource usage information.
       kubelet
       kube-proxy
       Container run time (*)
-
-Pod
-----
-A group of one or more containers.The smallest unit of k8s.The container has no ip address Pod has an IP address.
-If the pod fails, then that pod will not be created again, another new pod will be created and its IP will be different.
 
 kubelet
 --------
@@ -151,11 +148,38 @@ Similarly, a monolithic architecture suggests a single-tiered application where 
 In order to facilitate availability of master services, they should be deployed with odd numbers (e.g. 3,5,7,9 etc.) so quorum (master node majority) can be maintained should one or more masters fail.
 * In k8s everthing stores in etcd controllers
 # scaling up and down
-# scaling in and out
+Types of Auto Scaling in KubernetesBy default, Kubernetes supports three types of autoscaling:
 
+* Horizontal Scaling (Scaling Out)
+* pods will increases in cluster i.e horzinatal scalling.
+Horizontal scaling involves altering the number of pods available to the cluster to suit sudden changes in workload demands. As the scaling technique involves scaling pods instead of resources, it’s commonly a preferred approach to avoid resource deficits.
+
+* Vertical Scaling (Scaling Up)
+* pod size will increase i.e vertical scalling. 
+Contrary to horizontal scaling, a vertical scaling mechanism involves the dynamic provisioning of attributed resources such as RAM or CPU of cluster nodes to match application requirements. This is essentially achieved by tweaking the pod resource request parameters based on workload consumption metrics.The scaling technique automatically adjusts the pod resources based on the usage over time, thereby minimizing resource wastage and facilitating optimum cluster resource utilization. This can be considered an advantage when comparing Kubernetes horizontal vs. vertical scaling.
+![preview](./k8s_images/k8s31.png)
+
+* Cluster/Multidimensional Scaling
+Cluster scaling involves increasing or reducing the number of nodes in the cluster based on node utilization metrics and the existence of pending pods. The cluster autoscaling object typically interfaces with the chosen cloud provider so that it can request and deallocate nodes seamlessly as needed.Multidimensional scaling also allows a combination of both horizontal and vertical scaling for different resources at any given time. While doing so, the multidimensional autoscaler ensures there are no idle nodes for an extended duration and each pod in the cluster is precisely scheduled.
+# scaling in and out
+* Scaling out a Deployment will ensure new Pods are created and scheduled to Nodes with available resources. Scaling will increase the number of Pods to the new desired state.
+* In Kubernetes, several things are referred to as "autoscaling", including:
+
+* Horizontal Pod Autoscaler: adjusts the number of replicas of an application
+* Vertical Pod Autoscaler: adjusts the resource requests and limits of a container
+* Cluster Autoscaler: adjusts the number of nodes of a cluster
+* Horizontal scaling means increasing and decreasing the number of replicas. Vertical scaling means increasing and decreasing the compute resources of a single replica.
+* ![preview](./k8s_images/)
+* [referhere](https://bluexp.netapp.com/blog/cvo-blg-kubernetes-scaling-the-comprehensive-guide-to-scaling-apps)
+
+* Rollout:It is used for change the version of application``kubectl rolleout --help``
 ## Please ensure that, all the Classroom K8S Concepts covered so far, have to be practiced well both Technically and Theoretically as well for Interviews perspective like:
 
 * Pods / Containers
+* Pod
+----
+A group of one or more containers.The smallest unit of k8s.The container has no ip address Pod has an IP address.
+If the pod fails, then that pod will not be created again, another new pod will be created and its IP will be different.
 * containers:Containers are small, fast and portable because unlike a virtual machine, containers do not need to include a guest OS in every instance and can instead simply leverage the features and resources of the host OS.[referhere](https://www.ibm.com/topics/containers)
   * Benefits of containers
       *  Lightweight
@@ -164,8 +188,13 @@ In order to facilitate availability of master services, they should be deployed 
       *  Improves utilization
 
 * Jobs / CronJobs
+* K8s has two types of jobs
+   * Job: Run an activity/script to completion
+   * CronJob: Run an activity/script to completion at specific time period or intervals.
+[referhere](https://kubernetes.io/docs/concepts/workloads/controllers/job/)
 
 * ReplicaSets
+* 
 
 * Deployment
 
