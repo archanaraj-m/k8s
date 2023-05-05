@@ -5,3 +5,90 @@ k8s activity1(may5)
 * Create a Load Balancer to expose the nopCommerce to External World 
    NOTE: Try to draw the Architecture Diagram for the above by using Draw.io Tool.
    
+* First i wrote the yml file for MYSQL (resouces is stateful set)
+```yml
+---
+apiVersion: apps/v1
+kind:	StatefulSet
+metadata:
+  name: mysql
+  labels:
+    app: mysql
+spec:
+  replicas: 1
+  serviceName: mysql-svc 
+  selector:
+    matchLabels:
+      app: mysql
+  template:
+    metadata:
+      name: mysql
+      labels:
+        app: mysql
+    spec:
+      containers:
+        - name: mysql
+          image: mysql:5
+          env: 
+            - name: MYSQL_ROOT_PASSWORD
+              value: password
+            - name: MYSQL_USER
+              value: Archana
+            - name: MYSQL_USER
+              value: password  
+            - name: MYSQL_DATABASE
+              value: students
+          ports:
+            - containerPort: 3306
+          volumeMounts:
+            - name: mysql
+              mountPath: /var/lib/mysql
+          volumes:
+            name: mysql
+
+```
+* Next nop commerce deployment file
+```yml
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  name: nop-dp
+  labels:
+    app: nop
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nop
+  template: 
+    metadata:
+      name: nop
+      labels:
+        app: nop
+    spec:
+      containers:
+      - name: nopcont
+        image: archanaraj/nop:latest
+        ports:
+        - containerPort: 5000   
+``` 
+* nop commerce service file with loadbalncer
+
+```yml 
+---
+apiVersion: v1
+kind: Service
+metadata: 
+  name: nop-lb
+spec:
+  selector:
+    app: nop
+  ports:
+    - name: nop 
+        port: 32000
+        targetPort: 5000 
+  type: LoadBalancer 
+  
+```  
+             
