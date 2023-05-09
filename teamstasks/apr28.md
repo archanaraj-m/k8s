@@ -50,7 +50,7 @@ systemctl daemon-reload
 systemctl enable cri-docker.service
 systemctl enable --now cri-docker.socket
 ```
-# Below commands executed only in master node in root user only
+# Below commands executed in master, node in root user 
 
 * Installing kubadm, kubectl, kubelet [Referhere](https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/#installing-kubeadm-kubelet-and-kubectl)
 
