@@ -80,7 +80,7 @@ spec:
 * command is ``kubectl get pods --all-namespaces``
 ![preview](./../k8s_images/k8s39.png)
 * 5.Write down all the steps required to make Kubernetes highly available
-* 
+* https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/ha-topology/
 
 * 6.Do a rolling update and roll back
 * means rolling update is update the version(ex:java17) if we want for the application
@@ -118,5 +118,5 @@ spec:
             optional: false
       ports:
         - containerport: 3306
-
+```
 * 8.Create a nop commerce deployment with MySQL statefulset and nop deployment
