@@ -42,7 +42,10 @@ sudo apt-get update
 sudo apt-get install -y kubelet kubeadm kubectl
 sudo apt-mark hold kubelet kubeadm kubectl
 ```
-Deploy any application using kubectl
+# Deploy any application using kubectl
+```yml
+
+```
 Backup Kubernetes I.e backup etcd
 List out all the pod’s running in kube system namespace
 Write down all the steps required to make Kubernetes highly available
