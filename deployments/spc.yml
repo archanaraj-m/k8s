@@ -1,0 +1,37 @@
+---
+apiVersion: apps/v1 
+kind: Deployment
+metadata:
+  name: spc-deploy
+  labels:
+    app: spc  
+spec:
+  minReadySeconds: 3
+  replicas: 1
+  selector:
+    matchLabels:
+      app: spc
+  template:
+    metadata:
+      labels: 
+        app: spc
+    spec:
+      containers: 
+        - name: spc-cont
+          image: archanaraj/myspcimage:latest
+          ports :
+            - containerPort: 8080    
+
+---
+apiVersion: v1
+kind: Service
+metadata: 
+  name: spc-lb
+spec:
+  selector:
+    app: spc
+  ports:
+    - name: spc 
+      port: 32000
+      targetPort: 8080
+  type: LoadBalancer 

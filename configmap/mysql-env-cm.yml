@@ -9,7 +9,7 @@ spec:
       image: mysql:8
       envFrom:
         - configMapRef:
-            name: dummyconfig-mysql
+            name: mysql-config
             optional: false
       ports:
         - containerport: 3306
