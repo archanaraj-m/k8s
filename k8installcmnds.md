@@ -175,49 +175,49 @@ az aks create -g myResourceGroup -n myAKSCluster --enable-managed-identity --nod
 az aks install-cli
 az aks get-credentials --resource-group myResourceGroup --name myAKSCluster
 # Topics In Kubernetes
-History and Architecture
-kubernetes Installation
-kubeadm
-minikube
-kind
-objects, api-resoureces & work loads
-Pods
-pods creation
-imperative
-declarative - manifest file
-pod spec & restart policy
-Controllers
-pod spec
-jobs and cron jobs
-replics set spec
-replication controller
-labels and selector
-kubernetes as a service - AKS , EKS
-AKS cluster Creation
-service spec
-Internal
-External
-Health checks/probes
-liveness probe
-readiness probe
-startuo probe
-Resource Mgmt - Pods and Containers
-Requests and limits -CPU/Memory
-Container types in Pods
-Containers
-init containers
-ephemeral containers
-Deployment
-rolling out
-rolling back
-Annotations
-change cause
-Daemon set
-Scheduling Pods
-node selector
-affinity
-taints and tolerations
-Headless service
-Storage in k8s
-volumes
-stateful sets
+1. History and Architecture
+2. kubernetes Installation
+   kubeadm
+   minikube
+   kind
+3. objects, api-resoureces & work loads
+4. Pods
+   pods creation
+5. imperative - CLI(commandline interface)
+   declarative - manifest file
+6. pod spec & restart policy
+7. Controllers
+8. pod spec
+9. jobs and cron jobs
+10. replics set spec
+11. replication controller
+12. labels and selector
+13. kubernetes as a service - AKS , EKS
+14. AKS cluster Creation
+15. service spec
+   Internal
+   External
+16. Health checks/probes
+  liveness probe
+  readiness probe
+  startuo probe
+17. Resource Mgmt - Pods and Containers
+18. Requests and limits -CPU/Memory
+19. Container types in Pods
+   Containers
+   init containers
+   ephemeral containers
+20. Deployment
+  rolling out
+  rolling back
+21. Annotations
+22. change cause
+23. Daemon set
+24. Scheduling Pods
+25. node selector
+26. affinity
+27. taints and tolerations
+28. Headless service
+29. Storage in k8s
+   volumes
+   stateful sets
