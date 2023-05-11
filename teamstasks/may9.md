@@ -49,6 +49,7 @@ sudo apt-mark hold kubelet kubeadm kubectl
 ![preview](./../k8s_images/k8s35.png)
 ![preview](./../k8s_images/k8s36.png)
 ![preview](./../k8s_images/k8s37.png)
+
 * 2.Deploy any application using kubectl
 ```yml
 apiVersion: apps/v1 
@@ -75,10 +76,29 @@ spec:
             - containerPort: 8080    
 ```
 ![preview](./../k8s_images/k8s38.png)
+Use below steps to create AKS cluster
+* create one virtual machine in azure connect in terminal and execute below commmands
+```
+curl -L https://aka.ms/InstallAzureCli | bash
+source ~/.bashrc
+az login
+az login --tenant 00e5206b-f549-447d-8eaf-917573339f60
+az group create --name myResourceGroup --location eastus
+az aks create -g myResourceGroup -n myAKSCluster --enable-managed-identity --node-count 2 --enable-addons monitoring --enable-msi-auth-for-monitoring  --generate-ssh-keys
+sudo -i
+az aks install-cli
+exit
+az aks get-credentials --resource-group myResourceGroup --name myAKSCluster
+```
+![preview](./../k8s_images/k8s40.png)
+![preview](./../k8s_images/k8s41.png)
+![preview](./../k8s_images/k8s42.png)
 * 3.Backup Kubernetes I.e backup etcd
+
 * 4.List out all the pod’s running in kube system namespace
 * command is ``kubectl get pods --all-namespaces``
 ![preview](./../k8s_images/k8s39.png)
+
 * 5.Write down all the steps required to make Kubernetes highly available
 * https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/ha-topology/
 

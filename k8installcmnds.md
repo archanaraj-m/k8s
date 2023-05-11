@@ -83,6 +83,7 @@ kubeadm join 172.31.21.125:6443 --token tq7q1l.909bo8ioyn6snr1j \
 
 ## Class Exercises:
 * Write a manifest file to create nginx.
+```yml
 ---
 apiVersion: v1
 kind: Pod
@@ -98,10 +99,9 @@ spec:
 ```
 vi ex1.yml
 kubectl apply -f ex1.yml
-```
-preview
 
 * Write a manifest file to create nginx and alpine with sleep 1d.
+```yml
 ---
 apiVersion: v1
 kind: Pod
@@ -118,9 +118,10 @@ spec:
       args:
         - sleep
         - 1d
-preview
+```
 
 * Write a manifest file to create nginx, alpine with sleep 1d and alpine with 10s.
+```yml
 ---
 apiVersion: v1
 kind: Pod
@@ -142,9 +143,9 @@ spec:
       args:
         - sleep
         - 10s
-preview
 
 * Write a manifest file to create nginx and httpd with 80 port exposed.
+```yml
 ---
 apiVersion: v1
 kind: Pod
@@ -161,3 +162,62 @@ spec:
       ports:
         - containerPort: 80
 
+```
+
+# AKS Cluster Creation
+create a resource group
+create AKS cluster
+connect to cluster by installing kubectl
+config kubectl
+az group create --name myResourceGroup --location eastus
+az aks create -g myResourceGroup -n myAKSCluster --enable-managed-identity --node-count 1 --enable-addons monitoring --enable-msi-auth-for-monitoring  --generate-ssh-keys
+
+az aks install-cli
+az aks get-credentials --resource-group myResourceGroup --name myAKSCluster
+# Topics In Kubernetes
+History and Architecture
+kubernetes Installation
+kubeadm
+minikube
+kind
+objects, api-resoureces & work loads
+Pods
+pods creation
+imperative
+declarative - manifest file
+pod spec & restart policy
+Controllers
+pod spec
+jobs and cron jobs
+replics set spec
+replication controller
+labels and selector
+kubernetes as a service - AKS , EKS
+AKS cluster Creation
+service spec
+Internal
+External
+Health checks/probes
+liveness probe
+readiness probe
+startuo probe
+Resource Mgmt - Pods and Containers
+Requests and limits -CPU/Memory
+Container types in Pods
+Containers
+init containers
+ephemeral containers
+Deployment
+rolling out
+rolling back
+Annotations
+change cause
+Daemon set
+Scheduling Pods
+node selector
+affinity
+taints and tolerations
+Headless service
+Storage in k8s
+volumes
+stateful sets
