@@ -102,7 +102,7 @@ az aks get-credentials --resource-group myResourceGroup --name myAKSCluster
 * 5.Write down all the steps required to make Kubernetes highly available
 * https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/ha-topology/
 
-* 6.Do a rolling update and roll back
+* 6.Do a rolling update and roll back(29/30 directdevops)
 * means rolling update is update the version(ex:java17) if we want for the application
 * if we want previous version(ex:java11) i.e roll back
 * Role and ClusterRole:
@@ -111,6 +111,8 @@ They are just a set of rules that represent a set of permissions. A Role can onl
 As the name implies, it’s just the binding between a subject and a Role or a ClusterRole.
 
 * 7.Ensure usage of secret in MySQL and configmaps
+* configmaps yml file
+
 ```yml
 ---
 apiVersion: v1
@@ -122,6 +124,8 @@ data:
   MYSQL_PASSWORD: 1234
   MYSQL_ROOT_PASSWORD: 1234
   MYSQL_DATABASE: employees
+
+pod creation with config file
 
 ---
 apiVersion: v1
@@ -139,4 +143,72 @@ spec:
       ports:
         - containerport: 3306
 ```
+
+
 * 8.Create a nop commerce deployment with MySQL statefulset and nop deployment
+nop commerce deployment yml file
+
+```yml
+---
+apiVersion: apps/v1 
+kind: Deployment
+metadata:
+  name: nop-deploy
+  labels:
+    app: nop  
+spec:
+  minReadySeconds: 5
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nop
+  template:
+    metadata:
+      name: nop
+    spec:
+      containers: 
+        - name: nop-cont  
+          image: archanaraj/nop:latest
+          ports :
+            - ContainerPort: 5000    
+
+* my sql statefulset yml file
+---
+apiVersion: apps/v1
+kind:	StatefulSet
+metadata:
+  name: mysql
+  labels:
+    app: mysql
+spec:
+  replicas: 1
+  serviceName: mysql-svc 
+  selector:
+    matchLabels:
+      app: mysql
+  template:
+    metadata:
+      name: mysql
+      labels:
+        app: mysql
+    spec:
+      containers:
+        - name: mysql
+          image: mysql:5
+          env: 
+            - name: MYSQL_ROOT_PASSWORD
+              value: password
+            - name: MYSQL_USER
+              value: Archana
+            - name: MYSQL_USER
+              value: password  
+            - name: MYSQL_DATABASE
+              value: students
+          ports:
+            - containerPort: 3306
+          volumeMounts:
+            - name: mysql
+              mountPath: /var/lib/mysql
+          volumes:
+            name: mysql
+```
