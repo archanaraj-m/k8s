@@ -11,5 +11,5 @@ spec:
         - configMapRef:
             name: mysql-config
             optional: false
-      ports:
-        - containerport: 3306
+    - ports:
+         containerport: 3306

@@ -51,6 +51,7 @@ sudo apt-mark hold kubelet kubeadm kubectl
 ![preview](./../k8s_images/k8s37.png)
 
 * 2.Deploy any application using kubectl
+
 ```yml
 apiVersion: apps/v1 
 kind: Deployment
@@ -76,7 +77,9 @@ spec:
             - containerPort: 8080    
 ```
 ![preview](./../k8s_images/k8s38.png)
+
 Use below steps to create AKS cluster
+--------------------------------------
 * create one virtual machine in azure connect in terminal and execute below commmands
 ```
 curl -L https://aka.ms/InstallAzureCli | bash
@@ -93,6 +96,7 @@ az aks get-credentials --resource-group myResourceGroup --name myAKSCluster
 ![preview](./../k8s_images/k8s40.png)
 ![preview](./../k8s_images/k8s41.png)
 ![preview](./../k8s_images/k8s42.png)
+
 * 3.Backup Kubernetes I.e backup etcd
 
 * 4.List out all the pod’s running in kube system namespace
@@ -109,11 +113,39 @@ az aks get-credentials --resource-group myResourceGroup --name myAKSCluster
 They are just a set of rules that represent a set of permissions. A Role can only be used to grant access to resources within namespaces. A ClusterRole can be used to grant the same permissions as a Role but they can also be used to grant access to cluster-scoped resources, non-resource endpoints.
 * RoleBinding and ClusterRoleBinding:
 As the name implies, it’s just the binding between a subject and a Role or a ClusterRole.
+```yml
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  labels:
+    app: nginx
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1
+        ports:
+        - containerPort: 80
+```
+![preview](../k8s_images/k8s47.png)
+![preview](../k8s_images/k8s48.png)
+
 * rollout command is ``kubectl rollout history deployment/<deployment file name>`` 
 * example``kubectl rollout history deployment/ngnix-deploy``
 * check the status``kubectl rollout status deployment/nginx-deploy``
 * Now to rollback to previous versions and update multiple versions ``kubectl rollout undo``
 * next check the history again``kubectl rollout history deployment/ngnix-deploy`` 
+![preview](../k8s_images/k8s49.png)
 
 * 7.Ensure usage of secret in MySQL and configmaps
 * configmaps yml file
