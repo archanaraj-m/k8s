@@ -158,10 +158,16 @@ metadata:
   name: mysql-cm
 data:
   MYSQL_USER: archana
-  MYSQL_PASSWORD: 1234
-  MYSQL_ROOT_PASSWORD: 1234
+  MYSQL_PASSWORD: "1234"
+  MYSQL_ROOT_PASSWORD: "1234"
   MYSQL_DATABASE: employees
 ```
+* First apply above file means after configmap then only set the env below file
+* command ``kubectl apply -f mysql-config.yml``
+* ![preview](./../k8s_images/k8s50.png)
+* If pods create error came then delete all resources 
+* ![preview](./../k8s_images/k8s51.png)then apply the files 
+  
 * pod creation with config file
 ```yml
 ---
@@ -175,12 +181,15 @@ spec:
       image: mysql:8
       envFrom:
         - configMapRef:
-            name: mysql-config
+            name: mysql-cm
             optional: false
       ports:
-        - containerport: 3306
+        - containerPort: 3306
 ```
-
+![preview](./../k8s_images/k8s51.png)
+* for see the env variables ``kubectl exec mysql-env-cm -- printenv``
+* ![preview](./../k8s_images/k8s52.png)
+* 
 * pod secret yaml file for mysql
 
 ```yml

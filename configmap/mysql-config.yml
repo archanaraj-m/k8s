@@ -5,8 +5,8 @@ metadata:
   name: mysql-cm
 data:
   MYSQL_USER: archana
-  MYSQL_PASSWORD: 1234
-  MYSQL_ROOT_PASSWORD: 1234
+  MYSQL_PASSWORD: "1234"
+  MYSQL_ROOT_PASSWORD: "1234"
   MYSQL_DATABASE: employees
 
   
