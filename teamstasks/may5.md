@@ -90,6 +90,7 @@ spec:
 ```
 * for pods creation command is `` kubectl apply -f nop.yml``
 ![preview](../k8s_images/k8s44.png)
+* for checking ``kubectl get deploy``
 * view pods `` kubectl get po``  and view running pods ``kubectl get po -w``
 * 3. Create a Headless Service to interact with nopCommerce with MySQL 
 ```yml

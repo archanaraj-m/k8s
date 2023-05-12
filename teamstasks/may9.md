@@ -186,6 +186,7 @@ For encode the secrets[referhere](https://www.base64encode.org/)
 
 * 8.Create a nop commerce deployment with MySQL statefulset and nop deployment
 nop commerce deployment yml file
+---------------------------------
 
 ```yml
 ---
@@ -210,8 +211,14 @@ spec:
           image: archanaraj/nop:latest
           ports :
             - ContainerPort: 5000    
+```
+* for pods creation command is `` kubectl apply -f nop.yml``
+![preview](../k8s_images/k8s44.png)
+* for checking ``kubectl get deploy``
 
 * my sql statefulset yml file
+
+```yml
 ---
 apiVersion: apps/v1
 kind:	StatefulSet
@@ -250,4 +257,23 @@ spec:
               mountPath: /var/lib/mysql
           volumes:
             name: mysql
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-svc
+spec:
+  selector:
+    app: mysql
+  ports:
+    - name: mysql
+      port: 31000
+      targetPort: 3306            
 ```
+* above two files paste in ``vi mysql.yml``
+* for pods creation command is `` kubectl apply -f mysql.yml``
+* view servicefile(svc) `` kubectl get svc`` 
+* Iam using kubeadm so external Ip is <none>
+* for that Ip address we can use cluster AKS or EKS 
+* ![preview](../k8s_images/k8s45.png) 
