@@ -50,7 +50,7 @@ sudo apt-mark hold kubelet kubeadm kubectl
 ![preview](./../k8s_images/k8s36.png)
 ![preview](./../k8s_images/k8s37.png)
 
-* 2.Deploy any application using kubectl
+# 2.Deploy any application using kubectl
 
 ```yml
 apiVersion: apps/v1 
@@ -97,16 +97,16 @@ az aks get-credentials --resource-group myResourceGroup --name myAKSCluster
 ![preview](./../k8s_images/k8s41.png)
 ![preview](./../k8s_images/k8s42.png)
 
-* 3.Backup Kubernetes I.e backup etcd
+# 3.Backup Kubernetes I.e backup etcd
 
-* 4.List out all the pod’s running in kube system namespace
+# 4.List out all the pod’s running in kube system namespace
 * command is ``kubectl get pods --all-namespaces``
 ![preview](./../k8s_images/k8s39.png)
 
-* 5.Write down all the steps required to make Kubernetes highly available
+# 5.Write down all the steps required to make Kubernetes highly available
 * https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/ha-topology/
 
-* 6.Do a rolling update and roll back(30/04directdevops)
+# 6.Do a rolling update and roll back(30/04directdevops)
 * means rolling update is update the version(ex:java17) if we want for the application
 * if we want previous version(ex:java11) i.e roll back
 * Role and ClusterRole:
@@ -147,7 +147,7 @@ spec:
 * next check the history again``kubectl rollout history deployment/ngnix-deploy`` 
 ![preview](../k8s_images/k8s49.png)
 
-* 7.Ensure usage of secret in MySQL and configmaps
+# 7.Ensure usage of secret in MySQL and configmaps
 * configmaps yml file
 
 ```yml
@@ -189,8 +189,32 @@ spec:
 ![preview](./../k8s_images/k8s51.png)
 * for see the env variables ``kubectl exec mysql-env-cm -- printenv``
 * ![preview](./../k8s_images/k8s52.png)
-* 
+* ![preview](./../k8s_images/k8s53.png)
+
+Secrets
+-------
+
+* To deal with confidential data k8s has secrets
 * pod secret yaml file for mysql
+* copy and paste the yml file``vi mysql-secret.yml``
+* First we can execute the mysql-secret.yml file `` kubectl apply -f mysql-secret.yml``
+
+```yml
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mysql-secret
+data:
+  MYSQL_PASSWORD: MTIzNDUK #12345
+  MYSQL_ROOT_PASSWORD: bXlwYXNzd29yZAo= #mypassword
+  MYSQL_DATABASE: ZW1wbG95ZWVzCg== #employees
+  MYSQL_USER: YXJjaGFuYQ== #archana
+
+```
+* For encode the secrets[referhere](https://www.base64encode.org/)
+* copy and paste the yml file``vi mysql-pod-scrt.yml``
+* First we can execute the mysql-secret.yml file `` kubectl apply -f mysql-pod-scrt.yml``
 
 ```yml
 ---
@@ -209,23 +233,11 @@ spec:
       ports:
         - containerPort: 3306
 ```
-* mysql secret yaml file
-```yml
----
-apiVersion: v1
-kind: Secret
-metadata:
-  name: mysql-secret
-data:
-  MYSQL_PASSWORD: MTIzNDUK #12345
-  MYSQL_ROOT_PASSWORD: bXlwYXNzd29yZAo= #mypassword
-  MYSQL_DATABASE: ZW1wbG95ZWVzCg== #employees
-  MYSQL_USER: YXJjaGFuYQ== #archana
+* check the pods``kubectl get pods``
+* describe the mysql secret data``kubectl describe secret mysql-secret`` 
+* enter into the mysql container ``kubectl exec -it mysql -- mysql -u archana -p``
 
-```
-For encode the secrets[referhere](https://www.base64encode.org/)
-
-* 8.Create a nop commerce deployment with MySQL statefulset and nop deployment
+# 8.Create a nop commerce deployment with MySQL statefulset and nop deployment
 nop commerce deployment yml file
 ---------------------------------
 
