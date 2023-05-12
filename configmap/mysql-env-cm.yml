@@ -9,7 +9,7 @@ spec:
       image: mysql:8
       envFrom:
         - configMapRef:
-            name: mysql-config
+            name: mysql-cm
             optional: false
     - ports:
          containerport: 3306
