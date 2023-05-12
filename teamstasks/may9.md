@@ -43,12 +43,12 @@ sudo apt-get update
 sudo apt-get install -y kubelet kubeadm kubectl
 sudo apt-mark hold kubelet kubeadm kubectl
 ```
-![preview](./../k8s_images/k8s32.png)
-![preview](./../k8s_images/k8s33.png)
-![preview](./../k8s_images/k8s34.png)
-![preview](./../k8s_images/k8s35.png)
-![preview](./../k8s_images/k8s36.png)
-![preview](./../k8s_images/k8s37.png)
+![preview](./k8s_images/k8s32.png)
+![preview](./k8s_images/k8s33.png)
+![preview](./k8s_images/k8s34.png)
+![preview](./k8s_images/k8s35.png)
+![preview](./k8s_images/k8s36.png)
+![preview](./k8s_images/k8s37.png)
 
 # 2.Deploy any application using kubectl
 
@@ -76,7 +76,7 @@ spec:
           ports :
             - containerPort: 8080    
 ```
-![preview](./../k8s_images/k8s38.png)
+![preview](./k8s_images/k8s38.png)
 
 Use below steps to create AKS cluster
 --------------------------------------
@@ -93,15 +93,15 @@ az aks install-cli
 exit
 az aks get-credentials --resource-group myResourceGroup --name myAKSCluster
 ```
-![preview](./../k8s_images/k8s40.png)
-![preview](./../k8s_images/k8s41.png)
-![preview](./../k8s_images/k8s42.png)
+![preview](./k8s_images/k8s40.png)
+![preview](./k8s_images/k8s41.png)
+![preview](./k8s_images/k8s42.png)
 
 # 3.Backup Kubernetes I.e backup etcd
 
 # 4.List out all the pod’s running in kube system namespace
 * command is ``kubectl get pods --all-namespaces``
-![preview](./../k8s_images/k8s39.png)
+![preview](./k8s_images/k8s39.png)
 
 # 5.Write down all the steps required to make Kubernetes highly available
 * https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/ha-topology/
@@ -137,15 +137,15 @@ spec:
         ports:
         - containerPort: 80
 ```
-![preview](../k8s_images/k8s47.png)
-![preview](../k8s_images/k8s48.png)
+![preview](./k8s_images/k8s47.png)
+![preview](./k8s_images/k8s48.png)
 
 * rollout command is ``kubectl rollout history deployment/<deployment file name>`` 
 * example``kubectl rollout history deployment/ngnix-deploy``
 * check the status``kubectl rollout status deployment/nginx-deploy``
 * Now to rollback to previous versions and update multiple versions ``kubectl rollout undo``
 * next check the history again``kubectl rollout history deployment/ngnix-deploy`` 
-![preview](../k8s_images/k8s49.png)
+![preview](./k8s_images/k8s49.png)
 
 # 7.Ensure usage of secret in MySQL and configmaps
 * configmaps yml file
@@ -164,9 +164,9 @@ data:
 ```
 * First apply above file means after configmap then only set the env below file
 * command ``kubectl apply -f mysql-config.yml``
-* ![preview](./../k8s_images/k8s50.png)
+* ![preview](./k8s_images/k8s50.png)
 * If pods create error came then delete all resources 
-* ![preview](./../k8s_images/k8s51.png)then apply the files 
+* ![preview](./k8s_images/k8s51.png)then apply the files 
   
 * pod creation with config file
 ```yml
@@ -186,10 +186,10 @@ spec:
       ports:
         - containerPort: 3306
 ```
-![preview](./../k8s_images/k8s51.png)
+![preview](./k8s_images/k8s51.png)
 * for see the env variables ``kubectl exec mysql-env-cm -- printenv``
-* ![preview](./../k8s_images/k8s52.png)
-* ![preview](./../k8s_images/k8s53.png)
+* ![preview](./k8s_images/k8s52.png)
+* ![preview](./k8s_images/k8s53.png)
 
 Secrets
 -------
@@ -236,6 +236,8 @@ spec:
 * check the pods``kubectl get pods``
 * describe the mysql secret data``kubectl describe secret mysql-secret`` 
 * enter into the mysql container ``kubectl exec -it mysql -- mysql -u archana -p``
+* ![preview](./k8s_images/k8s54.png)
+* ![preview](./k8s_images/k8s55.png)
 
 # 8.Create a nop commerce deployment with MySQL statefulset and nop deployment
 nop commerce deployment yml file
@@ -266,7 +268,7 @@ spec:
             - ContainerPort: 5000    
 ```
 * for pods creation command is `` kubectl apply -f nop.yml``
-![preview](../k8s_images/k8s44.png)
+![preview](./k8s_images/k8s44.png)
 * for checking ``kubectl get deploy``
 
 * my sql statefulset yml file
@@ -329,4 +331,4 @@ spec:
 * view servicefile(svc) `` kubectl get svc`` 
 * Iam using kubeadm so external Ip is <none>
 * for that Ip address we can use cluster AKS or EKS 
-* ![preview](../k8s_images/k8s45.png) 
+* ![preview](./k8s_images/k8s45.png) 
