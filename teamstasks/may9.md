@@ -129,9 +129,9 @@ data:
   MYSQL_PASSWORD: 1234
   MYSQL_ROOT_PASSWORD: 1234
   MYSQL_DATABASE: employees
-
-pod creation with config file
-
+```
+* pod creation with config file
+```yml
 ---
 apiVersion: v1
 kind: Pod
@@ -149,6 +149,40 @@ spec:
         - containerport: 3306
 ```
 
+* pod secret yaml file for mysql
+
+```yml
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: mysql
+spec:
+  containers:
+    - name: mysql
+      image: mysql:8
+      envFrom:
+        - secretRef:
+            name: mysql-secret
+            optional: false
+      ports:
+        - containerPort: 3306
+```
+* mysql secret yaml file
+```yml
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mysql-secret
+data:
+  MYSQL_PASSWORD: MTIzNDUK #12345
+  MYSQL_ROOT_PASSWORD: bXlwYXNzd29yZAo= #mypassword
+  MYSQL_DATABASE: ZW1wbG95ZWVzCg== #employees
+  MYSQL_USER: YXJjaGFuYQ== #archana
+
+```
+For encode the secrets[referhere](https://www.base64encode.org/)
 
 * 8.Create a nop commerce deployment with MySQL statefulset and nop deployment
 nop commerce deployment yml file

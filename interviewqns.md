@@ -205,3 +205,4 @@ If the pod fails, then that pod will not be created again, another new pod will 
 * Stateful Sets and
 
 * Namespaces etc.  
+* for deleting all pods command is ``kubectl delete --all pods``

@@ -72,8 +72,8 @@ spec:
     app: mysql
   ports:
     - name: mysql
-        port: 31000
-        targetPort: 3306  
+      port: 31000
+      targetPort: 3306  
 
             
 

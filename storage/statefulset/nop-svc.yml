@@ -8,6 +8,6 @@ spec:
     app: nop
   ports:
     - name: nop 
-        port: 32000
-        targetPort: 5000 
+      port: 32000
+      targetPort: 5000 
   type: LoadBalancer         
