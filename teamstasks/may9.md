@@ -102,13 +102,18 @@ az aks get-credentials --resource-group myResourceGroup --name myAKSCluster
 * 5.Write down all the steps required to make Kubernetes highly available
 * https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/ha-topology/
 
-* 6.Do a rolling update and roll back(29/30 directdevops)
+* 6.Do a rolling update and roll back(30/04directdevops)
 * means rolling update is update the version(ex:java17) if we want for the application
 * if we want previous version(ex:java11) i.e roll back
 * Role and ClusterRole:
 They are just a set of rules that represent a set of permissions. A Role can only be used to grant access to resources within namespaces. A ClusterRole can be used to grant the same permissions as a Role but they can also be used to grant access to cluster-scoped resources, non-resource endpoints.
 * RoleBinding and ClusterRoleBinding:
 As the name implies, it’s just the binding between a subject and a Role or a ClusterRole.
+* rollout command is ``kubectl rollout history deployment/<deployment file name>`` 
+* example``kubectl rollout history deployment/ngnix-deploy``
+* check the status``kubectl rollout status deployment/nginx-deploy``
+* Now to rollback to previous versions and update multiple versions ``kubectl rollout undo``
+* next check the history again``kubectl rollout history deployment/ngnix-deploy`` 
 
 * 7.Ensure usage of secret in MySQL and configmaps
 * configmaps yml file
