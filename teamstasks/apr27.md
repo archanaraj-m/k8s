@@ -13,7 +13,7 @@ Kubernetes is composed of a number of components, each of which plays a specific
   * Control plane: The worker nodes and any pods contained within them will be under the control plane. 
  
  Kubernetes Architecture
-![preview](../k8s_images/img12.png)
+![preview](./k8s_images/img12.png)
 [referhere](https://www.geeksforgeeks.org/kubernetes-architecture/)
 
 
@@ -46,7 +46,7 @@ kubectl create deployment spc --image=raji07/rajispringpetclinic:spc
 kubectl expose deployment spc --type=NodePort --port=8080
 kubectl port-forward service/spc --address "0.0.0.0" 7080:8080
 ```
-![preview](../k8s_images/img8.png)
+![preview](./k8s_images/img8.png)
 * Let's create a pod configuration file: vi spc.yml
 
 * This opens a new file in the vi text editor.
@@ -72,11 +72,11 @@ kubectl get pods
 kubectl get pods -o wide
 ```
 
-![preview](../k8s_images/img9.png)
-![preview](../k8s_images/img10.png)
+![preview](./k8s_images/img9.png)
+![preview](./k8s_images/img10.png)
 * Goto new tab copy the node public IP address <publicIP:7080>
 * spc page came.
-![preview](../k8s_images/img11.png)
+![preview](./k8s_images/img11.png)
 
 # kind
 # Setup k8s on single node using kind and Run the Spring Pet Clinic.
@@ -114,4 +114,4 @@ spec:
         - containerPort: 8080
 ```
 
-![preview](../k8s_images/img13.png)
+![preview](./k8s_images/img13.png)

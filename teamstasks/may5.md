@@ -58,7 +58,7 @@ spec:
 ```
 * above two files paste in ``vi mysql.yml``
 * for pods creation command is `` kubectl apply -f mysql.yml``
-![preview](../k8s_images/k8s43.png)
+![preview](./k8s_images/k8s43.png)
 * view servicefile(svc) `` kubectl get svc`` 
 
 * 2. Create a nopCommerce deployment with 1 replica
@@ -89,7 +89,7 @@ spec:
         - containerPort: 5000   
 ```
 * for pods creation command is `` kubectl apply -f nop.yml``
-![preview](../k8s_images/k8s44.png)
+![preview](./k8s_images/k8s44.png)
 * for checking ``kubectl get deploy``
 * view pods `` kubectl get po``  and view running pods ``kubectl get po -w``
 * 3. Create a Headless Service to interact with nopCommerce with MySQL 
@@ -149,7 +149,7 @@ spec:
 * view servicefile(svc) `` kubectl get svc`` 
 * Iam using kubeadm so external Ip is <none>
 * for that Ip address we can use cluster AKS or EKS 
-* ![preview](../k8s_images/k8s45.png)                      
+* ![preview](./k8s_images/k8s45.png)                      
 
 * 4. Create a Load Balancer to expose the nopCommerce to External World 
 * nop commerce service file with loadbalncer
@@ -196,5 +196,5 @@ spec:
 * above two files paste in ``vi nop.yml``
 * for pods creation command is `` kubectl apply -f nop.yml``
 * view servicefile(svc) `` kubectl get deploy`` 
-* ![preview](../k8s_images/k8s46.png)   
+* ![preview](./k8s_images/k8s46.png)   
              

@@ -66,9 +66,9 @@ sudo apt-mark hold kubelet kubeadm kubectl
 ```
 * Now create a cluster from a master node, use the command ``kubeadm init --pod-network-cidr "10.244.0.0/16" --cri-socket "unix:///var/run/cri-dockerd.sock"``
   
-![preview](../k8s_images/img1.png)
-![preview](../k8s_images/img2.png)
-![preview](../k8s_images/img3.png)
+![preview](./k8s_images/img1.png)
+![preview](./k8s_images/img2.png)
+![preview](./k8s_images/img3.png)
 
 # b) minikube
 * A Kubernetes cluster can be deployed on either physical or virtual machines. To get started with Kubernetes development, you can use Minikube. Minikube is a lightweight Kubernetes implementation that creates a VM on your local machine and deploys a simple cluster containing only one node. Minikube is available for Linux, macOS, and Windows systems. The Minikube CLI provides basic bootstrapping operations for working with your cluster, including start, stop, status, and delete.
@@ -101,7 +101,7 @@ kubectl create deployment spc --image=raji07/rajispringpetclinic:spc
 kubectl expose deployment spc --type=NodePort --port=8080
 kubectl port-forward service/spc --address "0.0.0.0" 7080:8080
 ```
-![preview](../k8s_images/img8.png)
+![preview](./k8s_images/img8.png)
 * Let's create a pod configuration file: vi spc.yml
 
 * This opens a new file in the vi text editor.
@@ -127,11 +127,11 @@ kubectl get pods
 kubectl get pods -o wide
 ```
 
-![preview](../k8s_images/img9.png)
-![preview](../k8s_images/img10.png)
+![preview](./k8s_images/img9.png)
+![preview](./k8s_images/img10.png)
 * Goto new tab copy the node public IP address <publicIP:7080>
 * spc page came.
-![preview](../k8s_images/img11.png)
+![preview](./k8s_images/img11.png)
 
 # c)kind
 * kind is a tool for running local Kubernetes clusters using Docker container “nodes”.
@@ -151,7 +151,7 @@ kubectl get po
 kubectl describe po
 ```
 
-![preview](../k8s_images/img13.png)
+![preview](./k8s_images/img13.png)
 
 # 2) Writing the Manifest Files for Spc & nopCommerce Apps.
 
@@ -249,11 +249,11 @@ spec:
             - 10s
 ```
 * Execute the below commands and check the jobs time period in between run the jobs commands again.
-![preview](../k8s_images/k8s15.png)
+![preview](./k8s_images/k8s15.png)
 * The above error came for we didn't give restart policy and backoffLimit also
 * Jobs have backoffLimit to limit number of restarts and activeDeadline seconds to limit timeperiod of execution.
 * For jobs restartPolicy cannot be Always as job will never finish,so we can give that mandatory for jobs.
-![preview](../k8s_images/k8s16.png)
+![preview](./k8s_images/k8s16.png)
 * i can Give active deadline seconds 60 so the pod will be shown completed after 60s .
 ```
 # kubectl apply -f hellojob.yml
@@ -264,12 +264,12 @@ spec:
 # kubectl get po 
 ```
 * For delete the jobs
-![preview](../k8s_images/k8s17.png)
+![preview](./k8s_images/k8s17.png)
 
 # Now we can create the CronJob
 * Cronjob manifest which we have written create a job every minute and waits for completion
 * Follow the yml file for cronjob
-![preview](../k8s_images/k8s18.png)
+![preview](./k8s_images/k8s18.png)
 * Paste it in ``vi runmultipletimes.yml``
 
 ```yml
@@ -312,7 +312,7 @@ spec:
 # kubectl get po
 ```
 * Then the jobs are created again in every one minute because we can give the cron job time  every minute so it's created at every minute
-![preview](../k8s_images/k8s19.png)
+![preview](./k8s_images/k8s19.png)
 * Next delete the cronjob,if not deleted it's run every minute so i deleted that with use of below commands
 ```
 # kubectl delete -f runmultipletimes.yml
@@ -321,7 +321,7 @@ spec:
 # kubectl get po              
 ```
 * All jobs,pods are deleted
-![preview](../k8s_images/k8s20.png)
+![preview](./k8s_images/k8s20.png)
 
 # 5) Creating the ReplicaSet
 * ReplicaSet is controller which maintains count of Pods as Desired State
@@ -359,11 +359,11 @@ kubectl get replicasets.apps
 kubectl get po
 kubectl describe rs
 ```
-![preview](../k8s_images/k8s21.png)
+![preview](./k8s_images/k8s21.png)
 * Let's change the replica count ``kubectl scale --replicas=5 rs/nginx-rs``
 * Next check it with ``kubectl get po``
-![preview](../k8s_images/k8s22.png)
-![preview](../k8s_images/k8s26.png)
+![preview](./k8s_images/k8s22.png)
+![preview](./k8s_images/k8s26.png)
 * We can increase (scale out) as well decrease (scale in) the replica count
 * Create 5 Pods with jenkins and alpine in one Pod
 ```yml
@@ -402,10 +402,10 @@ spec:
 # kubectl get po
 # kubectl describe rs
 ```
-![preview](../k8s_images/k8s23.png)
+![preview](./k8s_images/k8s23.png)
 * deleting the pod with this command  ``kubectl delete pod <pod id or name>``  
 * After deleting the pod replica will create again 
-![preview](../k8s_images/k8s24.png)
+![preview](./k8s_images/k8s24.png)
 # 6) Writing the LABELS and Selecting the LABELS using selector concept
 * Labels are key value pairs that can be attached as metadata to k8s objects.
 * Labels help in selecting/querying/filtering objects
@@ -448,7 +448,7 @@ with using selector
 # kubectl get po --show-labels
 # same as it is in jenkins also we created labels
 ```
-![preview](../k8s_images/k8s25.png)
+![preview](./k8s_images/k8s25.png)
 * Create 5 pods with label app=jenkins
 ```yml
 ---
@@ -495,7 +495,7 @@ spec:
 # kubectl get po  
 ```
 * ReplicationController only allows equality based selectors where as ReplicaSet supports set based selectors also
-![preview](./../k8s_images/k8s27.png)
+![preview](./k8s_images/k8s27.png)
 
 * set based example yml file
 

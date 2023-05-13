@@ -82,10 +82,10 @@ kubeadm join 172.31.21.125:6443 --token tq7q1l.909bo8ioyn6snr1j \
 * For check the resources ``kubectl api-resources``
 
 
-![preview](../k8s_images/img1.png)
-![preview](../k8s_images/img2.png)
-![preview](../k8s_images/img3.png)
-![preview](../k8s_images/img4.png)
+![preview](./k8s_images/img1.png)
+![preview](./k8s_images/img2.png)
+![preview](./k8s_images/img3.png)
+![preview](./k8s_images/img4.png)
 
 * After that create a manifest file with reference of kubernetes 
 [referhere](https://kubernetes.io/docs/concepts/overview/working-with-objects/kubernetes-objects/)
@@ -110,7 +110,7 @@ spec:
       ports: 
         - containerPort: 8080
 
-![preview](../k8s_images/img5.png)
+![preview](./k8s_images/img5.png)
 * Then execute below commands
 ```
 vi spc.yml
@@ -119,7 +119,7 @@ kubectl get pods
 kubectl describe pods/spc
 ```
 * In that describe pod command we can see node2 IP address
-![preview](../k8s_images/img6.png)
+![preview](./k8s_images/img6.png)
 
 # # manifest file for nop commerce applications with use Pod spec 
 # nop.yml
@@ -144,7 +144,7 @@ kubectl get pods
 kubectl describe pods/nop
 ```
 * In that describe pod command we can see node2 IP address
-![preview](../k8s_images/img7.png)
+![preview](./k8s_images/img7.png)
 
 
 
