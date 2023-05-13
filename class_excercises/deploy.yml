@@ -1,0 +1,21 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  name: deploy
+  labels:
+    app: dashboard
+spec:
+  minReadySeconds: 1
+  selector:
+    matchLabels:
+      labels:
+        app: dashboard
+  template:
+    metadata:
+      name: dashboard-pod
+    spec:
+      containers:
+        - ports:
+            - containerPort: 80
+          image: shaikkhajaibrahim/dashboardservice:1.0.0       

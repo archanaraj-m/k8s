@@ -13,10 +13,9 @@ exit and relogin
 * After install docker in all 3 nodes exit and relogin because we can give usermod permissions.
 * After successful installation re-login into your machine
 * After re-login try to get docker info $ docker info
-# Run the below commands as root user in all 3 nodes
-
+* Run the below commands as root user in all 3 nodes
 # Run these commands as root
-###Install GO###
+
 ```
 sudo -i
 wget https://storage.googleapis.com/golang/getgo/installer_linux
@@ -46,11 +45,15 @@ sudo apt-mark hold kubelet kubeadm kubectl
 -------------------till here in 3 nodes only-----------
 
 * This command run in master node only
-* Now create a cluster from a master node, use the command ``kubeadm init --pod-network-cidr "10.244.0.0/16" --cri-socket "unix:///var/run/cri-dockerd.sock"``
+* Now create a cluster from a master node, use this command ``kubeadm init --pod-network-cidr "10.244.0.0/16" --cri-socket "unix:///var/run/cri-dockerd.sock"``
 
  ![preview](./k8s_images/img3.png)
 
-* After this command execution in the output the following commands are came.
+* After this command execution in the output the following commands are came 
+```
+kubeadm join 172.31.47.212:6443 --token o3w92f.36k6full7pu2ygi0 \
+        --discovery-token-ca-cert-hash sha256:bac5374430a738a01b6914e68058ac1f95c5682b2f113462779c908bf4411ebe
+```       
 * To start using your cluster, you need to run the following as a regular user(ubuntu user)
 * below commands execute only in master node 
   ```
@@ -63,7 +66,7 @@ sudo apt-mark hold kubelet kubeadm kubectl
   ```
  ![preview](./k8s_images/img4.png)
 * Now you need to run the following command in nodes, it will shows on master node.
-* Add nodes to the master use this command(it is in masternode and in that add cri socket)
+* Add nodes to the masternode use this command as a root user(it is in masternode and in that add cri socket)
 * This below command execute in another two nodes(means worker nodes) don't execute in master node.
 * Because it is use for connecting worker nodes to the master node.
 * In the kubeadm join(it is in the output of kubeadm init....sock command) command we can add this ``--cri-socket "unix:///var/run/cri-dockerd.sock"`` like see below command
