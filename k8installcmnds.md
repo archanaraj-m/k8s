@@ -1,4 +1,4 @@
-k8s install commands:
+https://www.ibm.com/cloud/architecture/architectures/retail-industry/reference-architecture/k8s install commands:
 
 * First we can create 3 instances with t2 medium
 * Next that 3 nodes 1 is master and another nodes are node1,node2.
@@ -224,3 +224,7 @@ az aks get-credentials --resource-group myResourceGroup --name myAKSCluster
 29. Storage in k8s
    volumes
    stateful sets
+
+   
+   for real time project tell about this architecture ecommerce or supplychain in this we cam select any 4 microservices tell about that.
+   https://www.ibm.com/cloud/architecture/architectures/retail-industry/reference-architecture/
