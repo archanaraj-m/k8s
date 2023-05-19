@@ -329,9 +329,55 @@ spec:
 ![preview](./k8s_images/k8s72.png)
 
 
-# * Create k8s cluster with version 1.25 and run any deployment(nginx/any) and then upgrade  cluster to version 1.27 
+# 2.Create k8s cluster with version 1.25 and run any deployment(nginx/any) and then upgrade  custer to version 1.27 
 [referhere](https://k21academy.com/docker-kubernetes/k8s-cluster-upgrade-step-by-step/) for documentation. 
 
 * For install specfic version command is ``sudo apt-get install -qy kubelet=<version> kubectl=<version> kubeadm=<version>``
 * Choose a version to upgrade to, and run the appropriate command. For example:
 ``sudo kubeadm upgrade apply v1.27.x``(replace x with the patch version you picked for this upgrade)
+The Upgrade Workflow
+--------------------
+* When you are upgrading the Kubernetes cluster created with kubeadm, the flow should be from version 1.25.x to version 1.26.x, and from version 1.26.x to 1.26.y (where y > x). Skipping MINOR versions when upgrading is unsupported.
+* The upgrade workflow at a high level is the following:
+   * Upgrade the primary control plane node.
+   * Upgrade additional control plane nodes.
+   * Upgrade worker nodes.
+Prerequisites:
+--------------
+1) Make sure you have a K8s cluster deployed already.
+* In all 3 nodes install docker 
+![preview](k8s_images/k8s73.png)
+* means in all 3 nodes install k8s all commands execute same as it is but before ``sudo apt-get update``&&``sudo apt-get install -y kubelet kubeadm kubectl`` this command execute below commands
+* follow this [referhere](https://k21academy.com/docker-kubernetes/three-node-kubernetes-cluster/)
+```
+KUBE_VERSION=1.23.0
+apt-get update
+apt-get install -y kubelet=${KUBE_VERSION}-00 kubeadm=${KUBE_VERSION}-00 kubectl=${KUBE_VERSION}-00 kubernetes-cni=0.8.7-00
+apt-mark hold kubelet kubeadm kubectl
+systemctl enable kubelet && systemctl start kubelet
+```
+![preview](./k8s_images/k8s74.png)
+![preview](./k8s_images/k8s75.png)
+create a kubernetes cluster
+---------------------------
+* 1) We have to initialize kubeadm on the master node. This command will check against the node that we have all the required dependencies. If it is passed, then it will install control plane components.
+* Run this command in Master Node only``kubeadm init --kubernetes-version=${KUBE_VERSION}``
+* 2) To start using the cluster, we have to set the environment variable on the master node.
+To temporarily set the environment variables on the master node, run the following commands:
+* Every time you are starting the Master, you have to set these Environment Variables.
+```
+cp /etc/kubernetes/admin.conf $HOME/
+chown  $(id -u) $HOME/admin.conf
+export KUBECONFIG=$HOME/admin.conf
+```
+![preview](./k8s_images/k8s76.png)
+* Join Worker Nodes to the Kubernetes Cluster:
+* this command execute in worker nodes only ``kubeadm join 172.31.43.184:6443 --token 4fcwjt.g75w91tawz2wkf2x \
+       --cri-socket "unix:///var/run/cri-dockerd.sock"
+        --discovery-token-ca-cert-hash sha256:3eda4a37010fe82cb1523c01c22a80efe749924e8609766326d906dc77a7aee1``
+![preview](./k8s_images/k8s77.png)
+* ``kubectl get nodes`` run this command in master node if nodes not ready then execute this command in master node ``kubectl apply -f https://github.com/weaveworks/weave/releases/download/v2.8.1/weave-daemonset-k8s.yaml``
+![preview](./k8s_images/k8s78.png)
+* after that for check the nodes ``kubectl get nodes``
+* for checking the pods ``kubectl get pods -n kube-system `` 
+![preview](./k8s_images/k8s79.png)        
