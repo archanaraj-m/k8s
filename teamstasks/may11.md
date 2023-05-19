@@ -64,92 +64,188 @@ sudo apt-mark hold kubelet kubeadm kubectl
 ![preview](k8s_images/k8s60.png)in this control plane means master node.(master node also called as control plane)             
 * In master node ``kubectl get nodes -w`` ![preview](k8s_images/k8s61.png)
 
+1. Node selector
+* we can use node selector for scheduling pods.
+* first we create pods and services with manifests files.
+* TO see the nodes and labels commands are ``kubectlget nodes`` `` kubectl get nodes --show-labels``
+* vi nop.yml
+* ``kubectl apply -f nop.yml``
 
-
-
-	1. Node selector
 ```yml
 ---
 apiVersion: apps/v1
-kind: DaemonSet
-metadata:
-  name: fluentd-ds
-  annotations:
-    kubernetes.io/change-cause: "update to latest"
+kind: Deployment
+metadata: 
+  name: nop-dp
+  labels:
+    app: nop
 spec:
-  minReadySeconds: 5
+  replicas: 1
   selector:
     matchLabels:
-      app: fluentd
-  template:
+      app: nop
+  template: 
     metadata:
-      name: fluentd
+      name: nop
       labels:
-        app: fluentd
+        app: nop
     spec:
       containers:
-        - name: fluentd
-          image: fluentd:latest 
-```
-* check the pod and node selector node name``kubectl get po -o wide``		  
-* Now lets select node by its name
-```yml
+      - name: nopcont
+        image: archanaraj/nop:latest
+        ports:
+        - containerPort: 5000     
 ---
 apiVersion: v1
-kind: Pod
-metadata:
-  name: nodeselector
-  labels:
-    app: nginx
-    purpose: nodeselector
+kind: Service
+metadata: 
+  name: nop-lb
 spec:
-  nodeName: "aks-nodepool1-32808340-vmss000000"
-  containers:
-    - name: jenkins
-      image: jenkins/jenkins:jdk11
+  selector:
+    app: nop
+  ports:
+    - name: nop 
+      port: 32000
+      targetPort: 5000 
+  type: LoadBalancer         
 ```
+*  To assign the labels to the nodes ``kubectl label nodes <nodename> <key=value>``&&`` kubectl label nodes ip-172-31-47-212 app=nop``
+*  To create nop manifest file to assign specific node by using nodeselector option ``kubectl apply -f nop.yml``&& ``kubectl get po -o wide``
+[preview](./k8s_images/k8s67.png)
+
+```yml
+---
+apiVersion: apps/v1
+kind:   StatefulSet
+metadata:
+  name: mysql
+  labels:
+    app: mysql
+spec:
+  replicas: 2
+  serviceName: mysql-svc
+  selector:
+    matchLabels:
+      app: mysql
+  template:
+    metadata:
+      name: mysql
+      labels:
+        app: mysql
+    spec:
+      containers:
+        - name: mysql
+          image: mysql:5
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              value: password
+            - name: MYSQL_USER
+              value: Archana
+            - name: MYSQL_PASSWORD
+              value: rootroot
+            - name: MYSQL_DATABASE
+              value: students
+          ports:
+            - containerPort: 3306
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-svc
+spec:
+  selector:
+    app: mysql
+  ports:
+    - name: mysql
+      port: 31000
+      targetPort: 3306
+```
+* check the pod and node selector node name``kubectl get po -o wide``		  
+*  To assign the labels to the nodes ``kubectl label nodes <nodename> <key=value>``&&`` kubectl label nodes ip-172-31-41-129 app=mysql``
+*  To create mysql manifest file to assign specific node by using nodeselector option ``kubectl apply -f mysql.yml``&& ``kubectl get po -o wide``
+[preview](./k8s_images/k8s68.png)
+
+
 1. Affinity
 -----------
+[referhere](https://kubernetes.io/docs/tasks/configure-pod-container/assign-pods-nodes-using-node-affinity/)for affinity documentation
 # Assign Pods to Nodes using Node Affinity
 * Node affinity is a property of Pods that attracts them to a set of nodes (either as a preference or a hard requirement). 
 
 * For this Kubernetes server must be at or later than version v1.10. To check the version, enter ``kubectl version``.
-* List the nodes in your cluster, along with their labels``kubectl get nodes --show-labels``
+* List the nodes in your cluster, along with their labels``kubectl get nodes`` && ``kubectl get nodes --show-labels``
+[preview](./k8s_images/k8s69.png)
 
 * Schedule a Pod using required node affinity
 -----------------------------------------------
 * This manifest describes a Pod that has a requiredDuringSchedulingIgnoredDuringExecution node affinity,disktype: ssd. This means that the pod will get scheduled only on a node that has a disktype=ssd label.
 
-* yml file for nginx required affinity with key value disktype
+* yml file for nop required affinity with key value disktype
 
 ```yml
-apiVersion: v1
-kind: Pod
-metadata:
-  name: nginx
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  name: nop-dp
+  labels:
+    app: nop
 spec:
-  affinity:
-    nodeAffinity:
-      requiredDuringSchedulingIgnoredDuringExecution:
-        nodeSelectorTerms:
-        - matchExpressions:
-          - key: disktype
-            operator: In
-            values:
-            - ssd            
-  containers:
-  - name: nginx
-    image: nginx
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nop
+  template: 
+    metadata:
+      name: nop
+      labels:
+        app: nop
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: disktype
+                operator: In
+                values:
+                - ssd
+      containers:
+      - name: nopcont
+        image: archanaraj/nop:latest
+        ports:
+        - containerPort: 5000     
+---
+apiVersion: v1
+kind: Service
+metadata: 
+  name: nop-lb
+spec:
+  selector:
+    app: nop
+  ports:
+    - name: nop 
+      port: 32000
+      targetPort: 5000 
+  type: LoadBalancer     
 ```
-* kubectl apply -f pod-nginx-required-affinity.yaml
+
+* kubectl apply -f nop-affinity.yaml
 
 * check the pods``kubectl get pods -o wide``
+* *  To assign the labels to the nodes ``kubectl label nodes <nodename> <key=value>``
+* For example for one node label is ssd`` kubectl label nodes ip-172-31-41-129 disktype=ssd``
+* And for another node label is ssd1``kubectl label nodes ip-172-31-47-212 disktype1=ssd1``
+[preview](./k8s_images/k8s70.png)
+
 * Schedule a Pod using preferred node affinity 
 ----------------------------------------------
 
 * This manifest describes a Pod that has a preferredDuringSchedulingIgnoredDuringExecution node affinity,disktype: ssd. This means that the pod will prefer a node that has a disktype=ssd label.
 
 ```yml
+---
 apiVersion: v1
 kind: Pod
 metadata:
@@ -171,8 +267,7 @@ spec:
 ```
 * create pod``kubectl apply -f pod-nginx-preferred-affinity.yaml``
 * verify pod ``kubectl get pods -o wide``
-  
-
+[preview](./k8s_images/k8s71.png)  
 1. Taints and tolerances
 ------------------------
 * Taints are the opposite to node affinity and they allow a node to repel(force) a set of pods.
