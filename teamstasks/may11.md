@@ -64,7 +64,7 @@ sudo apt-mark hold kubelet kubeadm kubectl
 ![preview](k8s_images/k8s60.png)in this control plane means master node.(master node also called as control plane)             
 * In master node ``kubectl get nodes -w`` ![preview](k8s_images/k8s61.png)
 
-1. Node selector
+# 1. Node selector
 * we can use node selector for scheduling pods.
 * first we create pods and services with manifests files.
 * TO see the nodes and labels commands are ``kubectlget nodes`` `` kubectl get nodes --show-labels``
@@ -167,7 +167,7 @@ spec:
 [preview](./k8s_images/k8s68.png)
 
 
-1. Affinity
+# 2. Affinity
 -----------
 [referhere](https://kubernetes.io/docs/tasks/configure-pod-container/assign-pods-nodes-using-node-affinity/)for affinity documentation
 # Assign Pods to Nodes using Node Affinity
@@ -265,10 +265,11 @@ spec:
   - name: nginx
     image: nginx
 ```
-* create pod``kubectl apply -f pod-nginx-preferred-affinity.yaml``
+* create pod``kubectl apply -f nginx-affinity.yaml``
 * verify pod ``kubectl get pods -o wide``
-[preview](./k8s_images/k8s71.png)  
-1. Taints and tolerances
+[preview](./k8s_images/k8s71.png) 
+
+# 3. Taints and tolerances
 ------------------------
 * Taints are the opposite to node affinity and they allow a node to repel(force) a set of pods.
 * Tolerations are applied to pods.
@@ -278,25 +279,56 @@ spec:
 
 * yml file for using tolerations
 ```yml
-apiVersion: v1
-kind: Pod
-metadata:
-  name: nginx
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  name: nop-dp
   labels:
-    env: test
+    app: nop
 spec:
-  containers:
-  - name: nginx
-    image: nginx
-  tolerations:
-  - key: "example-key"
-    operator: "Exists"
-    effect: "NoSchedule"
-```	
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nop
+  template: 
+    metadata:
+      name: nop
+      labels:
+        app: nop
+    spec:
+      tolerations:
+        - key: "example-key"
+          operator: "Exists"
+          effect: "NoSchedule"
+      containers:
+        - name: nopcont
+          image: archanaraj/nop:latest
+          ports:
+          - containerPort: 5000     
+---
+apiVersion: v1
+kind: Service
+metadata: 
+  name: nop-lb
+spec:
+  selector:
+    app: nop
+  ports:
+    - name: nop 
+      port: 32000
+      targetPort: 5000 
+  type: LoadBalancer         
+```
+* ``vi nop-tol.yml``
+* create pod``kubectl apply -f nop-tol.yaml``
+* verify pod ``kubectl get pods -o wide``
+* commands For add a taint to a node using ``kubectl taint``For example,``kubectl taint nodes ip-172-31-44-146 disktype=ssd:NoSchedule``
+* To remove the taint``kubectl taint nodes ip-172-31-44-146 disktype=ssd:NoSchedule-``
+[preview](./k8s_images/k8s72.png)
 
 
-
-* Create k8s cluster with version 1.25 and run any deployment(nginx/any) and then upgrade  cluster to version 1.27   
+# * Create k8s cluster with version 1.25 and run any deployment(nginx/any) and then upgrade  cluster to version 1.27   
 
 * For install specfic version command is ``sudo apt-get install -qy kubelet=<version> kubectl=<version> kubeadm=<version>``
 * Choose a version to upgrade to, and run the appropriate command. For example:
