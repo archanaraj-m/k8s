@@ -67,7 +67,7 @@ sudo apt-mark hold kubelet kubeadm kubectl
 # 1. Node selector
 * we can use node selector for scheduling pods.
 * first we create pods and services with manifests files.
-* TO see the nodes and labels commands are ``kubectlget nodes`` `` kubectl get nodes --show-labels``
+* To see the nodes and labels commands are ``kubectlget nodes`` `` kubectl get nodes --show-labels``
 * vi nop.yml
 * ``kubectl apply -f nop.yml``
 
@@ -111,7 +111,8 @@ spec:
 ```
 *  To assign the labels to the nodes ``kubectl label nodes <nodename> <key=value>``&&`` kubectl label nodes ip-172-31-47-212 app=nop``
 *  To create nop manifest file to assign specific node by using nodeselector option ``kubectl apply -f nop.yml``&& ``kubectl get po -o wide``
-[preview](./k8s_images/k8s67.png)
+*  
+![preview](./k8s_images/k8s67.png)
 
 ```yml
 ---
@@ -164,7 +165,7 @@ spec:
 * check the pod and node selector node name``kubectl get po -o wide``		  
 *  To assign the labels to the nodes ``kubectl label nodes <nodename> <key=value>``&&`` kubectl label nodes ip-172-31-41-129 app=mysql``
 *  To create mysql manifest file to assign specific node by using nodeselector option ``kubectl apply -f mysql.yml``&& ``kubectl get po -o wide``
-[preview](./k8s_images/k8s68.png)
+![preview](./k8s_images/k8s68.png)
 
 
 # 2. Affinity
@@ -175,7 +176,7 @@ spec:
 
 * For this Kubernetes server must be at or later than version v1.10. To check the version, enter ``kubectl version``.
 * List the nodes in your cluster, along with their labels``kubectl get nodes`` && ``kubectl get nodes --show-labels``
-[preview](./k8s_images/k8s69.png)
+![preview](./k8s_images/k8s69.png)
 
 * Schedule a Pod using required node affinity
 -----------------------------------------------
@@ -231,13 +232,13 @@ spec:
   type: LoadBalancer     
 ```
 
-* kubectl apply -f nop-affinity.yaml
+* creating pods ``kubectl apply -f nop-affinity.yml``
 
 * check the pods``kubectl get pods -o wide``
 * *  To assign the labels to the nodes ``kubectl label nodes <nodename> <key=value>``
 * For example for one node label is ssd`` kubectl label nodes ip-172-31-41-129 disktype=ssd``
 * And for another node label is ssd1``kubectl label nodes ip-172-31-47-212 disktype1=ssd1``
-[preview](./k8s_images/k8s70.png)
+![preview](./k8s_images/k8s70.png)
 
 * Schedule a Pod using preferred node affinity 
 ----------------------------------------------
@@ -267,7 +268,7 @@ spec:
 ```
 * create pod``kubectl apply -f nginx-affinity.yaml``
 * verify pod ``kubectl get pods -o wide``
-[preview](./k8s_images/k8s71.png) 
+![preview](./k8s_images/k8s71.png) 
 
 # 3. Taints and tolerances
 ------------------------
@@ -325,10 +326,11 @@ spec:
 * verify pod ``kubectl get pods -o wide``
 * commands For add a taint to a node using ``kubectl taint``For example,``kubectl taint nodes ip-172-31-44-146 disktype=ssd:NoSchedule``
 * To remove the taint``kubectl taint nodes ip-172-31-44-146 disktype=ssd:NoSchedule-``
-[preview](./k8s_images/k8s72.png)
+![preview](./k8s_images/k8s72.png)
 
 
-# * Create k8s cluster with version 1.25 and run any deployment(nginx/any) and then upgrade  cluster to version 1.27   
+# * Create k8s cluster with version 1.25 and run any deployment(nginx/any) and then upgrade  cluster to version 1.27 
+[referhere](https://k21academy.com/docker-kubernetes/k8s-cluster-upgrade-step-by-step/) for documentation. 
 
 * For install specfic version command is ``sudo apt-get install -qy kubelet=<version> kubectl=<version> kubeadm=<version>``
 * Choose a version to upgrade to, and run the appropriate command. For example:
