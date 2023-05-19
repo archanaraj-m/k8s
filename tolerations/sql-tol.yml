@@ -1,0 +1,53 @@
+---
+apiVersion: apps/v1
+kind:	StatefulSet
+metadata:
+  name: mysql
+  labels:
+    app: mysql
+spec:
+  replicas: 1
+  serviceName: mysql-svc 
+  selector:
+    matchLabels:
+      app: mysql
+  template:
+    metadata:
+      name: mysql
+      labels:
+        app: mysql
+    spec:
+      tolerations:
+        - key: "key"
+          operator: "Exists"
+          effect: "NoSchedule"
+      containers:
+        - name: mysql
+          image: mysql:5
+          env: 
+            - name: MYSQL_ROOT_PASSWORD
+              value: password
+            - name: MYSQL_USER
+              value: Archana
+            - name: MYSQL_PASSWORD
+              value: password  
+            - name: MYSQL_DATABASE
+              value: students
+          ports:
+            - containerPort: 3306
+          
+
+---
+apiVersion: v1
+kind: Service
+metadata: 
+  name: mysql-svc
+spec:
+  selector:
+    app: mysql
+  ports:
+    - name: mysql
+      port: 31000
+      targetPort: 3306  
+
+            
