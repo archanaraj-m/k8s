@@ -353,7 +353,7 @@ Prerequisites:
 apt-get update
 curl -fsSL https://get.docker.com -o get-docker.sh
 sh get-docker.sh
-sudo usermod -aG docker ubuntu
+usermod -aG docker ubuntu
 wget https://storage.googleapis.com/golang/getgo/installer_linux
 chmod +x ./installer_linux
 ./installer_linux
@@ -370,12 +370,13 @@ systemctl daemon-reload
 systemctl enable cri-docker.service
 systemctl enable --now cri-docker.socket
 cd ~
-sudo apt-get update
-sudo apt-get install -y apt-transport-https ca-certificates curl
-sudo curl -fsSLo /etc/apt/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg
+apt-get update
+apt-get install -y apt-transport-https ca-certificates curl
+curl -fsSLo /etc/apt/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg
 echo "deb [signed-by=/etc/apt/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
 ```
 * above all commands paste in ``vi k8s.yml``&&``chmod +x k8s.yml``&&``./k8s.yml``
+* ``exit`` and relogin(means connect the ubuntu because we install docker)
 * means in all 3 nodes install k8s all commands execute same as it is but before ``sudo apt-get update``this command execute below commands
 * follow this [referhere](https://k21academy.com/docker-kubernetes/three-node-kubernetes-cluster/)
 ```
