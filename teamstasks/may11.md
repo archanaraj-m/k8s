@@ -347,10 +347,39 @@ Prerequisites:
 1) Make sure you have a K8s cluster deployed already.
 * In all 3 nodes install docker 
 ![preview](k8s_images/k8s73.png)
-* means in all 3 nodes install k8s all commands execute same as it is but before ``sudo apt-get update``&&``sudo apt-get install -y kubelet kubeadm kubectl`` this command execute below commands
+* below commands run as root user(``sudo -i``)
+```
+#!/bin/bash
+apt-get update
+curl -fsSL https://get.docker.com -o get-docker.sh
+sh get-docker.sh
+sudo usermod -aG docker ubuntu
+wget https://storage.googleapis.com/golang/getgo/installer_linux
+chmod +x ./installer_linux
+./installer_linux
+source ~/.bash_profile
+git clone https://github.com/Mirantis/cri-dockerd.git
+cd cri-dockerd
+mkdir bin
+go build -o bin/cri-dockerd
+mkdir -p /usr/local/bin
+install -o root -g root -m 0755 bin/cri-dockerd /usr/local/bin/cri-dockerd
+cp -a packaging/systemd/* /etc/systemd/system
+sed -i -e 's,/usr/bin/cri-dockerd,/usr/local/bin/cri-dockerd,' /etc/systemd/system/cri-docker.service
+systemctl daemon-reload
+systemctl enable cri-docker.service
+systemctl enable --now cri-docker.socket
+cd ~
+sudo apt-get update
+sudo apt-get install -y apt-transport-https ca-certificates curl
+sudo curl -fsSLo /etc/apt/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg
+echo "deb [signed-by=/etc/apt/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
+```
+* above all commands paste in ``vi k8s.yml``&&``chmod +x k8s.yml``&&``./k8s.yml``
+* means in all 3 nodes install k8s all commands execute same as it is but before ``sudo apt-get update``this command execute below commands
 * follow this [referhere](https://k21academy.com/docker-kubernetes/three-node-kubernetes-cluster/)
 ```
-KUBE_VERSION=1.23.0
+KUBE_VERSION=1.25.0
 apt-get update
 apt-get install -y kubelet=${KUBE_VERSION}-00 kubeadm=${KUBE_VERSION}-00 kubectl=${KUBE_VERSION}-00 kubernetes-cni=0.8.7-00
 apt-mark hold kubelet kubeadm kubectl
@@ -373,11 +402,36 @@ export KUBECONFIG=$HOME/admin.conf
 ![preview](./k8s_images/k8s76.png)
 * Join Worker Nodes to the Kubernetes Cluster:
 * this command execute in worker nodes only ``kubeadm join 172.31.43.184:6443 --token 4fcwjt.g75w91tawz2wkf2x \
-       --cri-socket "unix:///var/run/cri-dockerd.sock"
+       --cri-socket "unix:///var/run/cri-dockerd.sock" \
         --discovery-token-ca-cert-hash sha256:3eda4a37010fe82cb1523c01c22a80efe749924e8609766326d906dc77a7aee1``
 ![preview](./k8s_images/k8s77.png)
 * ``kubectl get nodes`` run this command in master node if nodes not ready then execute this command in master node ``kubectl apply -f https://github.com/weaveworks/weave/releases/download/v2.8.1/weave-daemonset-k8s.yaml``
 ![preview](./k8s_images/k8s78.png)
 * after that for check the nodes ``kubectl get nodes``
-* for checking the pods ``kubectl get pods -n kube-system `` 
+* for checking the pods ``kubectl get pods -n kube-system`` 
 ![preview](./k8s_images/k8s79.png)        
+# Upgrade master node
+* Upgrading the control plane consist of the following steps:
+     * Upgrade kubeadm on the Control Plane node
+     * Drain the Control Plane node
+     * Plan the upgrade (kubeadm upgrade plan)
+     * Apply the upgrade (kubeadm upgrade apply)
+     * Upgrade kubelet & kubectl on the control Plane node
+     * Uncordon the Control Plane node
+* next run this commands on master node only
+```
+apt update
+apt-cache madison kubeadm
+```
+* On the control plane node, run``kubeadm upgrade plan``
+* Upgrading kubeadm tool``apt-mark unhold kubeadm && \
+apt-get update && apt-get install -y kubeadm=1.26.3-00 && \
+apt-mark hold kubeadm``
+* Verify that the download works and has the expected version``kubeadm version``
+* Drain the control plane node``kubectl drain <Node-Name> --ignore-daemonsets --delete-local-data``
+* example``kubectl drain ip-172-31-43-184 --ignore-daemonsets --delete-local-data``
+* On the control plane node, run``kubeadm upgrade plan``
+* On the control plane node, run``kubeadm upgrade apply v1.26.3``
+* error came because i install 1.23.0 version but upgrade not supported that version.
+* the upgrate working kuberenets version 1.25.0>= so again i can do the same above process for version 1.25.0
+![preview](k8s_images/k8s80.png)
