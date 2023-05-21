@@ -353,7 +353,7 @@ Prerequisites:
 apt-get update
 curl -fsSL https://get.docker.com -o get-docker.sh
 sh get-docker.sh
-usermod -aG docker ubuntu
+usermod -aG docker root
 wget https://storage.googleapis.com/golang/getgo/installer_linux
 chmod +x ./installer_linux
 ./installer_linux
