@@ -6,9 +6,9 @@ https://www.ibm.com/cloud/architecture/architectures/retail-industry/reference-a
 ```
 curl -fsSL https://get.docker.com -o get-docker.sh
 sh get-docker.sh
-sudo usermod -aG docker ubuntu
-docker info
+sudo usermod -aG docker ubuntu 
 exit and relogin
+docker info
 ```
 * After install docker in all 3 nodes exit and relogin because we can give usermod permissions.
 * After successful installation re-login into your machine
