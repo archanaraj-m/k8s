@@ -47,7 +47,7 @@ sudo apt-mark hold kubelet kubeadm kubectl
 * This command run in master node only
 * Now create a cluster from a master node, use this command ``kubeadm init --pod-network-cidr "10.244.0.0/16" --cri-socket "unix:///var/run/cri-dockerd.sock"``
 
- ![preview](./k8s_images/img3.png)
+ ![preview](./teamstasks/k8s_images/img3.png)
 
 * After this command execution in the output the following commands are came 
 ```
@@ -64,7 +64,7 @@ kubeadm join 172.31.47.212:6443 --token o3w92f.36k6full7pu2ygi0 \
   kubectl apply -f https://github.com/flannel-io/flannel/releases/latest/download/kube-flannel.yml
 
   ```
- ![preview](./k8s_images/img4.png)
+ ![preview](./teamstasks/k8s_images/img4.png)
 * Now you need to run the following command in nodes, it will shows on master node.
 * Add nodes to the masternode use this command as a root user(it is in masternode and in that add cri socket)
 * This below command execute in another two nodes(means worker nodes) don't execute in master node.
