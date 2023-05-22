@@ -372,7 +372,7 @@ systemctl enable --now cri-docker.socket
 cd ~
 apt-get update
 apt-get install -y apt-transport-https ca-certificates curl
-curl -fsSLo /etc/apt/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg
+curl -fsSLo /etc/apt/keyrings/kubernetes-archive-keyring.gpg https://dl.k8s.io/apt/doc/apt-key.gpg
 echo "deb [signed-by=/etc/apt/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
 ```
 * above all commands paste in ``vi k8s.yml``&&``chmod +x k8s.yml``&&``./k8s.yml``
@@ -382,16 +382,30 @@ echo "deb [signed-by=/etc/apt/keyrings/kubernetes-archive-keyring.gpg] https://a
 ```
 KUBE_VERSION=1.25.0
 apt-get update
-apt-get install -y kubelet=${KUBE_VERSION}-00 kubeadm=${KUBE_VERSION}-00 kubectl=${KUBE_VERSION}-00 kubernetes-cni=0.8.7-00
+apt-get install -y kubelet=${KUBE_VERSION}-00 kubeadm=${KUBE_VERSION}-00 kubectl=${KUBE_VERSION}-00
 apt-mark hold kubelet kubeadm kubectl
 systemctl enable kubelet && systemctl start kubelet
 ```
 ![preview](./k8s_images/k8s74.png)
 ![preview](./k8s_images/k8s75.png)
+
+* error came because i install 1.23.0 version but upgrade not supported that version.
+* the upgrate working kuberenets version 1.25.0>= so again i can do the same above process for version 1.25.0
+![preview](k8s_images/k8s80.png)
+* If below error came any time you can check this solution
+![preview](./k8s_images/k8s81.png)
+# got the solution:
+Instead of "sudo curl -fsSLo /etc/apt/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg"
+* use below command:
+"sudo curl -fsSLo /etc/apt/keyrings/kubernetes-archive-keyring.gpg https://dl.k8s.io/apt/doc/apt-key.gpg"
+* Also please delete older kubernetes.list file as per screenshot
+* This issue is explained in depth in below discussion, which as per my understanding is   that the key .gpg file in older URL is not reachable & giving 500 response
+ [referhere](https://github.com/kubernetes/k8s.io/pull/4837)
+
 create a kubernetes cluster
 ---------------------------
 * 1) We have to initialize kubeadm on the master node. This command will check against the node that we have all the required dependencies. If it is passed, then it will install control plane components.
-* Run this command in Master Node only``kubeadm init --kubernetes-version=${KUBE_VERSION}``
+* Run this command in Master Node only``kubeadm init --pod-network-cidr "10.244.0.0/16" --cri-socket "unix:///var/run/cri-dockerd.sock"``&& ``kubeadm init --kubernetes-version=${KUBE_VERSION}``
 * 2) To start using the cluster, we have to set the environment variable on the master node.
 To temporarily set the environment variables on the master node, run the following commands:
 * Every time you are starting the Master, you have to set these Environment Variables.
@@ -424,15 +438,64 @@ export KUBECONFIG=$HOME/admin.conf
 apt update
 apt-cache madison kubeadm
 ```
+![preview](./k8s_images/k8s82.png) 
 * On the control plane node, run``kubeadm upgrade plan``
-* Upgrading kubeadm tool``apt-mark unhold kubeadm && \
+![preview](./k8s_images/k8s83.png) 
+* Upgrading kubeadm tool `` apt-mark unhold kubeadm && \
 apt-get update && apt-get install -y kubeadm=1.26.3-00 && \
-apt-mark hold kubeadm``
+apt-mark hold kubeadm ``
 * Verify that the download works and has the expected version``kubeadm version``
+![preview](./k8s_images/k8s84.png) 
 * Drain the control plane node``kubectl drain <Node-Name> --ignore-daemonsets --delete-local-data``
 * example``kubectl drain ip-172-31-43-184 --ignore-daemonsets --delete-local-data``
 * On the control plane node, run``kubeadm upgrade plan``
+![preview](./k8s_images/k8s85.png) 
 * On the control plane node, run``kubeadm upgrade apply v1.26.3``
-* error came because i install 1.23.0 version but upgrade not supported that version.
-* the upgrate working kuberenets version 1.25.0>= so again i can do the same above process for version 1.25.0
-![preview](k8s_images/k8s80.png)
+* Uncordon the control plane node ``kubectl uncordon <node name>``like``kubectl uncordon ip-172-31-21-61``
+* Upgrade kubelet and kubectl 
+```
+apt-mark unhold kubelet kubectl && \
+apt-get update && apt-get install -y kubelet=1.26.3-00 kubectl=1.26.3-00 && \
+apt-mark hold kubelet kubectl
+```
+![preview](./k8s_images/k8s86.png) 
+* Restart the kubelet ``systemctl daemon-reload``&&``systemctl restart kubelet``
+* Check Version ``kubectl get nodes``
+![preview](./k8s_images/k8s87.png) 
+
+# Upgrade worker nodes
+* The upgrade procedure on worker nodes should be executed one node at a time or few nodes at a time, without compromising the minimum required capacity for running your workloads.
+* Upgrading the worker nodes consist of the following steps:
+    * Drain the node
+    * Upgrade kubeadm on the node
+    * Upgrade the kubelet configuration (kubeadm upgrade node)
+    * Upgrade kubelet & kubectl
+    * Uncordon the node
+* Check the Version of the worker node From master machine ``Kubectl get nodes``
+![preview](./k8s_images/k8s88.png)
+* Upgrade kubeadm perform this on Worker Machine means 2 worker nodes
+```
+apt-mark unhold kubeadm && \
+apt-get update && apt-get install -y kubeadm=1.26.3-00 && \
+apt-mark hold kubeadm
+```
+![preview](./k8s_images/k8s89.png)
+* Drain the Worker Node (perform this on master Machine)``kubectl drain <node-to-drain(worker node IP)> --ignore-daemonsets``like this``kubectl drain ip-172-31-22-84 --ignore-daemonsets``&&``kubectl drain ip-172-31-22-242 --ignore-daemonsets``
+![preview](./k8s_images/k8s90.png)
+* Upgrade kubelet config on worker node (perform this on 2 Worker node)``kubeadm upgrade node``
+![preview](./k8s_images/k8s91.png)
+* Upgrade kubelet and kubectl (perform this on 2 Worker node)
+```
+apt-mark unhold kubelet kubectl && \
+apt-get update && apt-get install -y kubelet=1.26.3-00 kubectl=1.26.3-00 && \
+apt-mark hold kubelet kubectl
+```
+* Restart the kubelet``systemctl daemon-reload``&&``systemctl restart kubelet``
+![preview](./k8s_images/k8s92.png)
+* Uncordon the node (perform this on master Machine)``kubectl uncordon <node name>``
+* Verify the status of the cluster``kubectl get nodes``
+![preview](./k8s_images/k8s93.png)
+* all noddes are upgraded
+* Next we want to upgrade 1.26.3 to 1.27.1
+* same above process in master and worker nodes in the version place we can change 1.27.1
+* 

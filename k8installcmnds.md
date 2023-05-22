@@ -45,7 +45,7 @@ sudo apt-mark hold kubelet kubeadm kubectl
 -------------------till here in 3 nodes only-----------
 
 * This command run in master node only
-* Now create a cluster from a master node, use this command ``kubeadm init --pod-network-cidr "10.244.0.0/16" --cri-socket "unix:///var/run/cri-dockerd.sock"``
+* Now create a cluster from a master node, use this command ``kubeadm init --pod-network-cidr "10.244.0.0/16" --cri-socket "unix:///var/run/cri-dockerd.sock" ``
 
  ![preview](./teamstasks/k8s_images/img3.png)
 
