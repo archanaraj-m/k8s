@@ -498,4 +498,10 @@ apt-mark hold kubelet kubectl
 * all noddes are upgraded
 * Next we want to upgrade 1.26.3 to 1.27.1
 * same above process in master and worker nodes in the version place we can change 1.27.1
-* 
+![preview](./k8s_images/k8s94.png)
+![preview](./k8s_images/k8s95.png)
+![preview](./k8s_images/k8s96.png)
+![preview](./k8s_images/k8s97.png)
+![preview](./k8s_images/k8s98.png)
+![preview](./k8s_images/k8s99.png)
+![preview](./k8s_images/k8s100.png)
