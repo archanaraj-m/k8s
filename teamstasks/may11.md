@@ -1,5 +1,8 @@
 # Kubernetes tasks – 11-05-2023
 * 1.Create 1 master node and 2 worker nodes – run app on node1 and db on node2 by using
+    * node selector
+    * Affinity
+    * taints and tolerance
 * First i can create 3 t2.medium nodes(instances) in AWS
 * In that 3 nodes we have to install docker with use of below commands
 * Next create shell script to install kubeadm
