@@ -1,5 +1,18 @@
-JOIP Task for (kubernetes trained batch)
-----------------------------------------
+JOIP Task for (kubernetes trained batch)(16-05-2023)
+---------------------------------------------------
+1. Installing EKS and Aks
+2. installations using helm chart
+        1. Mysql
+        2. PostgreSql
+        3. mongoDB
+        3. Redis cache
+3. make Mysql as Stateful set
+4. write headless service for Mysql1
+5. write kostomize file by creating files for 3 environments
+        1.dev-environment
+        2.qa-environment
+        3.test-environment
+6. every environment should have their own secrets
 1. Installing EKS and Aks
 EKS Cluster
 -----------
@@ -49,7 +62,7 @@ kind: ClusterConfig
 
 metadata:
   name: basic-cluster
-  region: us-west-2
+  region: eu-west-3
 
 nodeGroups:
   - name: basic
@@ -63,7 +76,8 @@ nodeGroups:
 * Now execute the command ``eksctl create cluster -f cluster.yml``
 * After creation execute``kubectl get nodes``&&``kubectl get pods --all-namespaces``
 ![preview](./k8s_images/k8s104.png)
-
+* For deleting the cluster ``eksctl delete cluster --name=<name> [--region=<region>]``example ``eksctl delete cluster --name=basic-cluster --region=eu-west-3``
+![preview](./k8s_images/k8s117.png)
 Helm chart
 ----------
 * creating helm chart commands are
@@ -95,18 +109,30 @@ values.yaml,charts,chatrs.yaml,templetes.
 * For deleting the helmchart ``helm delete <chartname>``
 ![preview](./k8s_images/k8s112.png)
 1. installations using helm chart
-  1. Mysql
+# 1. Mysql
 * [referhere](https://dev.mysql.com/doc/mysql-operator/en/mysql-operator-installation-helm.html)
 ![preview](./k8s_images/k8s113.png)
-
-  2. PostgreSql
+![preview](./k8s_images/k8s114.png)
+* Above preview they are created helm chart and pods created with the namespaces so we can search pods with namespaces``kubectl get -n mysql-operator po``
+![preview](./k8s_images/k8s115.png)
+* pod is running so enter to db ``kubectl -n mysql-operator exec -it mysql-operator-79d96c78c9-69lnp -- /bin/sh``
+* in that mysql-operator is my repo name
+* enter the details in above they are mentioned in that see preview116 
+  ![preview](./k8s_images/k8s116.png)
+* the given password is not working error came.  
+# 2. PostgreSql
 * [referhere]()
-        1. mongoDB
-        2. Redis cache
-1. make Mysql as Stateful set
-2. write headless service for Mysql1
-3. write kostomize file by creating files for 3 environments
+# 3. mongoDB
+# 4. Redis cache
+
+
+
+
+
+3. make Mysql as Stateful set
+4. write headless service for Mysql1
+5. write kostomize file by creating files for 3 environments
         1.dev-environment
         2.qa-environment
         3.test-environment
-4. every environment should have their own secrets
+6. every environment should have their own secrets
