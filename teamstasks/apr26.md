@@ -106,7 +106,7 @@ metadata:
 spec:
   containers:
     - name: spc-cont
-      image: raji07/rajispringpetclinic:spc
+      image: archanaraj/myspcimage:tagname:latest
       ports: 
         - containerPort: 8080
 
@@ -131,7 +131,7 @@ metadata:
 spec:
   containers:
     - name: nopcont
-      image: raji07/rajeshwari-nopcommerce
+      image: archanaraj/nop:1.0
       ports:
         - containerPort: 5000
   
