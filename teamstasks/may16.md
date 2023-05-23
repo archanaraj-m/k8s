@@ -121,11 +121,11 @@ values.yaml,charts,chatrs.yaml,templetes.
   ![preview](./k8s_images/k8s116.png)
 * the given password is not working error came.  
 # 2. PostgreSql
-* [referhere]()
+* [referhere](https://phoenixnap.com/kb/postgresql-kubernetes)
 # 3. mongoDB
 # 4. Redis cache
 
-
+* kostomize is better then helmchart because in kostomize we can use reusable files
 
 
 
