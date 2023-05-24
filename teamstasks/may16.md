@@ -80,7 +80,8 @@ nodeGroups:
 # For deleting the cluster ``eksctl delete cluster --name=<name> [--region=<region>]``example ``eksctl delete cluster --name=basic-cluster --region=eu-west-3``
 ![preview](./k8s_images/k8s117.png)
 * After delete the cluster check in our aws all regions instances,auto scalling groups,volumes.
-Helm chart
+
+2.Helm chart
 ----------
 * creating helm chart commands are
 ```
@@ -136,9 +137,14 @@ values.yaml,charts,chatrs.yaml,templetes.
 * kostomize is better then helmchart because in kostomize we can use reusable files.
 
 
-
 3. make Mysql as Stateful set
+
+
+
 4. write headless service for Mysql1
+
+
+
 5. write kostomize file by creating files for 3 environments
         1.dev-environment
         2.qa-environment
@@ -150,5 +156,12 @@ kustomize
 * kustimize is a tool where we can natively(natively means In particuler system) mange the configurations.
 * Natively manage dynamic configurations to k8s manifests
       * create a service file exposed as LoadBalancer
+* For kustomization yaml file [referhere](https://www.digitalocean.com/community/tutorials/how-to-manage-your-kubernetes-configurations-with-kustomize)
+* After creating all folders and kustomization files we can create namespaces``kubectl create ns <namespace name>``like this``kubectl create ns dev``(in <namespace name> dev,qt,uat)
+* For creating  ``kubectl apply -k ./``
+* For deploy ``kubectl get deploy -n dev``
+* For pods  ``kubectl get po -n dev``
+* For delete dev environment``kubectl delete -k -n dev ./`` (in this command if we didn't clone form windows we can mentioned namespace -n dev otherwise we can goto that dev folder then delete for that command is ``kubectl delete -k ./``)
+
 
 1. every environment should have their own secrets
