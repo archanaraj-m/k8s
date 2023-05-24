@@ -55,6 +55,7 @@ sudo mv /tmp/eksctl /usr/local/bin
 ```
 ![preview](./k8s_images/k8s103.png)
 * before that cluster creation with yml file we have to do aws configure and kubectl configure must.
+* before creating cluster we execute ssh-keygen ``ssh-keygen``
 * Create a file called as cluster.yml with the following content
 ```yml
 apiVersion: eksctl.io/v1alpha5
@@ -76,8 +77,9 @@ nodeGroups:
 * Now execute the command ``eksctl create cluster -f cluster.yml``
 * After creation execute``kubectl get nodes``&&``kubectl get pods --all-namespaces``
 ![preview](./k8s_images/k8s104.png)
-* For deleting the cluster ``eksctl delete cluster --name=<name> [--region=<region>]``example ``eksctl delete cluster --name=basic-cluster --region=eu-west-3``
+# For deleting the cluster ``eksctl delete cluster --name=<name> [--region=<region>]``example ``eksctl delete cluster --name=basic-cluster --region=eu-west-3``
 ![preview](./k8s_images/k8s117.png)
+* After delete the cluster check in our aws all regions instances,auto scalling groups,volumes.
 Helm chart
 ----------
 * creating helm chart commands are
@@ -131,7 +133,7 @@ values.yaml,charts,chatrs.yaml,templetes.
 # 4. Redis cache
 * [Referhere](https://bitnami.com/stack/redis/helm)
 * For installation redis cache helm command is``helm install my-release oci://registry-1.docker.io/bitnamicharts/redis``
-* kostomize is better then helmchart because in kostomize we can use reusable files
+* kostomize is better then helmchart because in kostomize we can use reusable files.
 
 
 
@@ -141,4 +143,12 @@ values.yaml,charts,chatrs.yaml,templetes.
         1.dev-environment
         2.qa-environment
         3.test-environment
-6. every environment should have their own secrets
+kustomize
+---------
+* For kustomize[Referhere](https://kustomize.io/)
+* for kustomize usage[referhere](https://kubectl.docs.kubernetes.io/guides/introduction/kustomize/)  
+* kustimize is a tool where we can natively(natively means In particuler system) mange the configurations.
+* Natively manage dynamic configurations to k8s manifests
+      * create a service file exposed as LoadBalancer
+
+1. every environment should have their own secrets
