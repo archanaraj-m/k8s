@@ -159,14 +159,18 @@ kustomize
 * For kustomization yaml file [referhere](https://www.digitalocean.com/community/tutorials/how-to-manage-your-kubernetes-configurations-with-kustomize)
 * After creating all folders and kustomization files we can create namespaces``kubectl create ns <namespace name>``like this``kubectl create ns dev``(in <namespace name> dev,qt,uat)
 * For creating  ``kubectl apply -k ./``
+* For apply ``kubectl apply -k overlays/dev``&&``kubectl apply -k overlays/qt``&&``kubectl apply -k overlays/uat``
 * For deploy ``kubectl get deploy -n dev``
 * For pods  ``kubectl get po -n dev``
 * For delete dev environment``kubectl delete -k -n dev ./`` (in this command if we didn't clone form windows we can mentioned namespace -n dev otherwise we can goto that dev folder then delete for that command is ``kubectl delete -k ./``)
 * For see the all resources in dev namespace ``kubectl get all -n dev``
-
+* For build ``kubectl build overlays/dev``
 * After creating the labels ``kubectl apply -k ./``
+* After creating the labels ``kubectl apply -k overlays/dev``
 * For show pods in dev namespaces``kubectl get po --show-labels -n dev``
 * For deleting ``kubectl delete -k ./``
+
+
 
 
 1. every environment should have their own secrets
