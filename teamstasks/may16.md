@@ -110,9 +110,11 @@ values.yaml,charts,chatrs.yaml,templetes.
 ![preview](./k8s_images/k8s112.png)
 1. installations using helm chart
 # 1. Mysql
-* [referhere](https://dev.mysql.com/doc/mysql-operator/en/mysql-operator-installation-helm.html)
+* [referhere](https://bitnami.com/stack/mysql/helm)
+![preview](./k8s_images/k8s118.png)
 ![preview](./k8s_images/k8s113.png)
 ![preview](./k8s_images/k8s114.png)
+* For installation mysql helm command is ``helm install my-release oci://registry-1.docker.io/bitnamicharts/mysql``
 * Above preview they are created helm chart and pods created with the namespaces so we can search pods with namespaces``kubectl get -n mysql-operator po``
 ![preview](./k8s_images/k8s115.png)
 * pod is running so enter to db ``kubectl -n mysql-operator exec -it mysql-operator-79d96c78c9-69lnp -- /bin/sh``
@@ -121,10 +123,14 @@ values.yaml,charts,chatrs.yaml,templetes.
   ![preview](./k8s_images/k8s116.png)
 * the given password is not working error came.  
 # 2. PostgreSql
-* [referhere](https://phoenixnap.com/kb/postgresql-kubernetes)
+* [referhere](https://bitnami.com/stack/postgresql/helm)
+* For installation postgresql helm command is ``helm install my-release oci://registry-1.docker.io/bitnamicharts/postgresql``
 # 3. mongoDB
+* [referhere](https://bitnami.com/stack/mongodb/helm)
+* For installation mongodb helm command is ``helm install my-release oci://registry-1.docker.io/bitnamicharts/mongodb``
 # 4. Redis cache
-
+* [Referhere](https://bitnami.com/stack/redis/helm)
+* For installation redis cache helm command is``helm install my-release oci://registry-1.docker.io/bitnamicharts/redis``
 * kostomize is better then helmchart because in kostomize we can use reusable files
 
 
