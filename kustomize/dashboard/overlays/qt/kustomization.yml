@@ -1,6 +1,6 @@
 ---
 bases:
-- ../../bases
+- ../../base
 
 namespace: qt
 namePrefix: qt-  
