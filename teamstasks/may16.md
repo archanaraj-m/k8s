@@ -18,10 +18,10 @@ EKS Cluster
 -----------
 * Elastic kubernetes Services is a managed k8s from aws
 * EKS cluster can be created in many ways
-       * aws console
-       * aws cli
-       * terraform
-       * eksctl this will be used
+  * aws console
+  * aws cli
+  * terraform
+  * eksctl this will be used
 * Features [referhere](https://aws.amazon.com/eks/features/)
 * Create a linux instance, install aws cli, create iam credentials
 * After connecting the ubuntu ``sudo apt update``&&``sudo apt install unzip -y``
@@ -57,16 +57,17 @@ sudo mv /tmp/eksctl /usr/local/bin
 * before that cluster creation with yml file we have to do aws configure and kubectl configure must.
 * before creating cluster we execute ssh-keygen ``ssh-keygen``
 * Create a file called as cluster.yml with the following content
+* paste below yaml file in this ``vi cluster.yml``
 ```yml
 apiVersion: eksctl.io/v1alpha5
 kind: ClusterConfig
 
 metadata:
-  name: basic-cluster
+  name: basic-cluster # we can give any name it is cluster name
   region: eu-west-3
 
 nodeGroups:
-  - name: basic
+  - name: basic # node group name
     instanceType: t2.large
     desiredCapacity: 2
     volumeSize: 20
