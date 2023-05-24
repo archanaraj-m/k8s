@@ -27,3 +27,7 @@ spec:
             successThreshold: 1
         - readinessProbe:  
             successThreshold: 1
+        - name: nopcont
+          image: archanaraj/nop:latest
+          ports:
+            - containerPort: 5000     
