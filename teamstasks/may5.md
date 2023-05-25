@@ -149,7 +149,9 @@ spec:
 * view servicefile(svc) `` kubectl get svc`` 
 * Iam using kubeadm so external Ip is <none>
 * for that Ip address we can use cluster AKS or EKS 
-* ![preview](./k8s_images/k8s45.png)                      
+* ![preview](./k8s_images/k8s45.png) 
+* For enter into my sql database command is ``mysql --user=root --password=mypassword`` 
+* For pod connecting ``kubectl exec -it <podname> -- /bin/sh``                    
 
 * 4. Create a Load Balancer to expose the nopCommerce to External World 
 * nop commerce service file with loadbalncer

@@ -84,6 +84,7 @@ nodeGroups:
 
 2.Helm chart
 ----------
+* After creating cluster we can create helm , helm created in that cluster.
 * creating helm chart commands are
 [referhere](https://helm.sh/docs/intro/install/)
 
@@ -121,7 +122,8 @@ values.yaml,charts,chatrs.yaml,templetes.
 ![preview](./k8s_images/k8s113.png)
 ![preview](./k8s_images/k8s114.png)
 * For installation mysql helm command is ``helm install my-release oci://registry-1.docker.io/bitnamicharts/mysql``
-* Above preview they are created helm chart and pods created with the namespaces so we can search pods with namespaces``kubectl get -n mysql-operator po``
+![preview](./k8s_images/k8s126.png)
+* Above preview they are created helm chart and pods created with the namespaces so we can search pods with namespaces`` kubectl get pods -w --namespace default``
 ![preview](./k8s_images/k8s115.png)
 * pod is running so enter to db ``kubectl -n mysql-operator exec -it mysql-operator-79d96c78c9-69lnp -- /bin/sh``
 * in that mysql-operator is my repo name
@@ -131,22 +133,120 @@ values.yaml,charts,chatrs.yaml,templetes.
 # 2. PostgreSql
 * [referhere](https://bitnami.com/stack/postgresql/helm)
 * For installation postgresql helm command is ``helm install my-release oci://registry-1.docker.io/bitnamicharts/postgresql``
+![preview](./k8s_images/k8s127.png)
 # 3. mongoDB
 * [referhere](https://bitnami.com/stack/mongodb/helm)
 * For installation mongodb helm command is ``helm install my-release oci://registry-1.docker.io/bitnamicharts/mongodb``
+![preview](./k8s_images/k8s128.png)
 # 4. Redis cache
 * [Referhere](https://bitnami.com/stack/redis/helm)
-* For installation redis cache helm command is``helm install my-release oci://registry-1.docker.io/bitnamicharts/redis``
+* For installation redis cache helm command is``helm install my-release-redis oci://registry-1.docker.io/bitnamicharts/redis``
 * kostomize is better then helmchart because in kostomize we can use reusable files.
-
-
+![preview](./k8s_images/k8s129.png)
+* For Next type exit. 
 3. make Mysql as Stateful set
+* ``vi mysql.yml``
+```yml
+---
+apiVersion: apps/v1
+kind:	StatefulSet
+metadata:
+  name: mysql
+  labels:
+    app: mysql
+spec:
+  replicas: 1
+  serviceName: mysql-svc 
+  selector:
+    matchLabels:
+      app: mysql
+  template:
+    metadata:
+      name: mysql
+      labels:
+        app: mysql
+    spec:
+      containers:
+        - name: mysql
+          image: mysql:5
+          env: 
+            - name: MYSQL_ROOT_PASSWORD
+              value: password
+            - name: MYSQL_USER
+              value: Archana
+            - name: MYSQL_PASSWORD
+              value: password  
+            - name: MYSQL_DATABASE
+              value: students
+          ports:
+            - containerPort: 3306
+          
+---
+apiVersion: v1
+kind: Service
+metadata: 
+  name: mysql-svc
+spec:
+  selector:
+    app: mysql
+  ports:
+    - name: mysql
+      port: 31000
+      targetPort: 3306  
 
-
-
+```
+* For enter into my sql database command is ``mysql --user=Archana --password=password`` 
+* For pod connecting ``kubectl exec -it <podname> -- /bin/sh``   
+* After enter to mysql `` mysql -u Archana -p password``         
+![preview](./k8s_images/k8s130.png)
 4. write headless service for Mysql1
+```yml
+---
+apiVersion: apps/v1
+kind:	StatefulSet
+metadata:
+  name: mysql
+  labels:
+    app: mysql
+spec:
+  replicas: 1
+  serviceName: mysql-svc 
+  selector:
+    matchLabels:
+      app: mysql
+  template:
+    metadata:
+      name: mysql
+      labels:
+        app: mysql
+    spec:
+      containers:
+        - name: mysql
+          image: mysql:5
+          env: 
+            - name: MYSQL_ROOT_PASSWORD
+              value: password
+            - name: MYSQL_USER
+              value: Archana
+            - name: MYSQL_PASSWORD
+              value: password  
+            - name: MYSQL_DATABASE
+              value: students
+          ports:
+            - containerPort: 3306
 
-
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-svc
+  labels:
+    app: mysql
+spec: 
+  clusterIP: "None"
+  ports:
+    - port: 3306
+```
 
 5. write kostomize file by creating files for 3 environments
         1.dev-environment
