@@ -25,8 +25,16 @@ spec:
       containers:
         - livenessProbe:
             successThreshold: 1
+            initialDelaySeconds: 1
+            periodSeconds: 10
+            timeoutSeconds: 1
+            failureThreshold: 3
           readinessProbe:  
             successThreshold: 1
+            initialDelaySeconds: 1
+            periodSeconds: 10
+            timeoutSeconds: 1
+            failureThreshold: 3
           name: nopcont
           image: archanaraj/nop:latest
           ports:
