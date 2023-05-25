@@ -126,7 +126,7 @@ values.yaml,charts,chatrs.yaml,templetes.
 * pod is running so enter to db ``kubectl -n mysql-operator exec -it mysql-operator-79d96c78c9-69lnp -- /bin/sh``
 * in that mysql-operator is my repo name
 * enter the details in above they are mentioned in that see preview116 
-  ![preview](./k8s_images/k8s116.png)
+![preview](./k8s_images/k8s116.png)
 * the given password is not working error came.  
 # 2. PostgreSql
 * [referhere](https://bitnami.com/stack/postgresql/helm)
@@ -162,17 +162,27 @@ kustomize
 * For kustomization yaml file [referhere](https://www.digitalocean.com/community/tutorials/how-to-manage-your-kubernetes-configurations-with-kustomize)
 * After creating cluster create namespaces
 * After creating all folders and kustomization files we can create namespaces``kubectl create ns <namespace name>``like this``kubectl create ns dev``(in <namespace name> dev,qt,uat)check namespaces``kubectl get ns``
+![preview](./k8s_images/k8s119.png)
+* After creating cluster git clone my kubernetes repo in that see preview 
+![preview](./k8s_images/k8s120.png)
 * For creating  ``kubectl apply -k ./``
+* After apply kubectl svc,hpa created but deployment is in-valid error came so i add in helthchecks livenesprob,redinesprob in that add httpget,path,port then ``git pull`` next apply now deployment created.
+![preview](./k8s_images/k8s121.png) 
 * For apply ``kubectl apply -k overlays/dev``&&``kubectl apply -k overlays/qt``&&``kubectl apply -k overlays/uat``
+![preview](./k8s_images/k8s122.png) 
 * For deploy ``kubectl get deploy -n dev``
 * For pods  ``kubectl get po -n dev``
+![preview](./k8s_images/k8s123.png) 
 * For delete dev environment``kubectl delete -k -n dev ./`` (in this command if we didn't clone form windows we can mentioned namespace -n dev otherwise we can goto that dev folder then delete for that command is ``kubectl delete -k ./``)
 * For see the all resources in dev namespace ``kubectl get all -n dev``
+![preview](./k8s_images/k8s124.png) 
 * For build ``kubectl build overlays/dev``
-* After creating the labels ``kubectl apply -k ./``
-* After creating the labels ``kubectl apply -k overlays/dev``
+* After creating the labels ``kubectl apply -k ./``or``kubectl apply -k overlays/dev``
 * For show pods in dev namespaces``kubectl get po --show-labels -n dev``
 * For deleting ``kubectl delete -k ./``
+* take that external IP nd paste in new tab with port number<externalIP:portnumber>
+* like see preview
+![preview](./k8s_images/k8s125.png) 
 
 
 
