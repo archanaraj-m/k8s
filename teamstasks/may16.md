@@ -160,7 +160,8 @@ kustomize
 * Natively manage dynamic configurations to k8s manifests
       * create a service file exposed as LoadBalancer
 * For kustomization yaml file [referhere](https://www.digitalocean.com/community/tutorials/how-to-manage-your-kubernetes-configurations-with-kustomize)
-* After creating all folders and kustomization files we can create namespaces``kubectl create ns <namespace name>``like this``kubectl create ns dev``(in <namespace name> dev,qt,uat)
+* After creating cluster create namespaces
+* After creating all folders and kustomization files we can create namespaces``kubectl create ns <namespace name>``like this``kubectl create ns dev``(in <namespace name> dev,qt,uat)check namespaces``kubectl get ns``
 * For creating  ``kubectl apply -k ./``
 * For apply ``kubectl apply -k overlays/dev``&&``kubectl apply -k overlays/qt``&&``kubectl apply -k overlays/uat``
 * For deploy ``kubectl get deploy -n dev``

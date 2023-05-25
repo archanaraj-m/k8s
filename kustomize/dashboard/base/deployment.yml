@@ -1,6 +1,6 @@
 ---
 apiVersion: apps/v1
-kind: 	Deployment
+kind: Deployment
 metadata:
   name: nop-dp
   labels: 
@@ -25,9 +25,9 @@ spec:
       containers:
         - livenessProbe:
             successThreshold: 1
-        - readinessProbe:  
+          readinessProbe:  
             successThreshold: 1
-        - name: nopcont
+          name: nopcont
           image: archanaraj/nop:latest
           ports:
             - containerPort: 5000     
