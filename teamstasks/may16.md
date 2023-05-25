@@ -182,7 +182,8 @@ kustomize
 * For deleting ``kubectl delete -k ./``
 * take that external IP nd paste in new tab with port number<externalIP:portnumber>
 * like see preview
-![preview](./k8s_images/k8s125.png) 
+![preview](./k8s_images/k8s125.png)
+* After that delete cluster`` eksctl delete cluster --name=mycluster --region=eu-west-3``  
 
 
 
