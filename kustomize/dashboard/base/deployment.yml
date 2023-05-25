@@ -29,12 +29,18 @@ spec:
             periodSeconds: 10
             timeoutSeconds: 1
             failureThreshold: 3
+            httpGet:
+              path: /
+              port: 5000
           readinessProbe:  
             successThreshold: 1
             initialDelaySeconds: 1
             periodSeconds: 10
             timeoutSeconds: 1
             failureThreshold: 3
+            httpGet:
+              path: /
+              port: 5000
           name: nopcont
           image: archanaraj/nop:latest
           ports:
