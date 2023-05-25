@@ -1,5 +1,6 @@
 ---
-bases:
+---
+resources:
 - ../../base
 
 namespace: uat
