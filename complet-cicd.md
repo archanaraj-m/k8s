@@ -155,25 +155,31 @@ sudo sh -c 'echo deb https://pkg.jenkins.io/debian-stable binary/ > \
 sudo apt-get update
 sudo apt-get install jenkins
 ```
+![preview](../teamstasks/k8s_images/k8s133.png)
 4. Verify Jenkins installation:
 * After installing Jenkins we can verify the jenkins installation by accessing the initial login page of the jenkins.
 
 * Since we have installed Jenkins on virtual machine with IP:8080
 * Find Default jenkins password:
  As we can see we need to provide Default jenkins(initialAdminPassword) administrator password.on this path ``cat /var/lib/jenkins/secrets/initialAdminPassword``
+![preview](../teamstasks/k8s_images/k8s134.png)
 * After enter the password customize jenkins page opened in that click on install suggested plugin.
+![preview](../teamstasks/k8s_images/k8s135.png)
 * Select install suggested plugin and then it should install all the default plugins which is required for running Jenkins.
 * After successful login setup username and password
+![preview](../teamstasks/k8s_images/k8s136.png)
+![preview](../teamstasks/k8s_images/k8s137.png)
 * After we have installed all the suggested default plugins, it will prompt you for setting up username and password
 * After that jenkins is ready to use click on start using jenkins
+![preview](../teamstasks/k8s_images/k8s138.png)
 5. Jenkins - Install "SSH Pipeline Steps" plugin and "Gradle":
 * SSH Pipeline Steps:
 * we need to install one more plugin SSH Pipeline Steps which we are going to use for SSH into k8smaster and k8sworker server.
 
 * For installing plugin please goto - Manage Jenkins -> Manage Plugin -> Available then in the search box type SSH Pipeline Steps.
 
-* NSelect the plugin and install it without restart.
-
+* Select the plugin and install it without restart.
+![preview](../teamstasks/k8s_images/k8s139.png)
 * Setup Gradle:
 For this lab session we are going to use Spring pet clinic Application, so for that we need Gradle as our build tool.
 
@@ -193,13 +199,22 @@ sh get-docker.sh
 sudo usermod -aG docker jenkins 
 exit and relogin
 docker info
-``` 
+```
+![preview](../teamstasks/k8s_images/k8s140.png) 
 7. Take spc application 
 * Now its time for you to look at our application which we are going to deploy inside kubernetes cluster using Jenkins Pipeline.
 * you can clone the code repo from - Source Code
 
 * The source code also include the Dockerfile for building the dockerimage
-
+```dockerfile
+FROM amazoncorretto:11
+LABEL author="archana"
+LABEL organization="qt"
+LABEL project="learning"
+COPY spring-petclinic-2.4.2.jar  /spring-petclinic-2.4.2.jar
+EXPOSE 8080
+CMD ["sleep", "10s"]
+```
 8. Write the Pipeline script:
 * CI/CD Jenkins Pipeline script into steps
 8.1 Create Jenkins Pipeline
@@ -222,6 +237,7 @@ Goto : Jenkins -> New Items
 
 * Goto : Jenkins -> Manage Jenkins -> Manage Credentials
 * Keep the ID somewhere store so that you remember - GIT_HUB_CREDENTIALS
+![preview](../teamstasks/k8s_images/k8s141.png)
 8.4 Build the Spring Pet Clinic
 * Next step would be to build the Spc Using Gradle
 
@@ -235,7 +251,7 @@ Goto : Jenkins -> New Items
    1. Secret - Type in the DockerHub Password
    2. ID - DOCKER_HUB_PASSWORD
    3. Description - Docker Hub password
-
+![preview](../teamstasks/k8s_images/k8s142.png)
 8.7 Docker Login via CLI
 * Since I am working inside Jenkins so every step I perform I need to write pipeline script. Now after building and tagging the Docker Image we need to push it to the DockerHub. But before you push to DockerHub you need to authenticate yourself via CLI(command line interface) using docker login.
 * $DOCKER_HUB_PASSWORD - Since I cann't disclose my DockerHub password, so I stored my DockerHub Password into Jenkins Manage Jenkins and assigned the ID $DOCKER_HUB_PASSWORD
@@ -260,7 +276,7 @@ node {
 
     stage("Git Clone"){
 
-        git credentialsId: 'GIT_CREDENTIALS', url: 'https://github.com/rahulwagh/spring-boot-docker.git'
+        git credentialsId: 'GIT_CREDENTIALS', url: 'https://github.com/archanaraj-m/dummyspring.git'
     }
 
      stage('Gradle Build') {
@@ -271,33 +287,33 @@ node {
 
     stage("Docker build"){
         sh 'docker version'
-        sh 'docker build -t jhooq-docker-demo .'
+        sh 'docker build -t spcimage .'
         sh 'docker image list'
-        sh 'docker tag jhooq-docker-demo rahulwagh17/jhooq-docker-demo:jhooq-docker-demo'
+        sh 'docker tag myspcimage docker push archanaraj/spcimage:cicd'
     }
 
     withCredentials([string(credentialsId: 'DOCKER_HUB_PASSWORD', variable: 'PASSWORD')]) {
-        sh 'docker login -u rahulwagh17 -p $PASSWORD'
+        sh 'docker login -u archanraj -p password'
     }
 
     stage("Push Image to Docker Hub"){
-        sh 'docker push  rahulwagh17/jhooq-docker-demo:jhooq-docker-demo'
+        sh 'docker push  archanaraj/spcimage:cicd'
     }
 
     stage("SSH Into k8s Server") {
         def remote = [:]
         remote.name = 'K8S master'
         remote.host = '100.0.0.2'
-        remote.user = 'vagrant'
-        remote.password = 'vagrant'
+        remote.user = 'terraform'
+        remote.password = 'password'
         remote.allowAnyHosts = true
 
-        stage('Put k8s-spring-boot-deployment.yml onto k8smaster') {
-            sshPut remote: remote, from: 'k8s-spring-boot-deployment.yml', into: '.'
+        stage('Put k8s-spc-deployment.yml onto k8smaster') {
+            sshPut remote: remote, from: 'spc-deploy.yml', into: '.'
         }
 
         stage('Deploy spring boot') {
-          sshCommand remote: remote, command: "kubectl apply -f k8s-spring-boot-deployment.yml"
+          sshCommand remote: remote, command: "kubectl apply -f spc-deploy.yml"
         }
     }
 
