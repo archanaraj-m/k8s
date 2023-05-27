@@ -115,6 +115,7 @@ values.yaml,charts,chatrs.yaml,templetes.
 ![preview](./k8s_images/k8s111.png)
 * For deleting the helmchart ``helm delete <chartname>``
 ![preview](./k8s_images/k8s112.png)
+
 1. installations using helm chart
 # 1. Mysql
 * [referhere](https://bitnami.com/stack/mysql/helm)
@@ -129,7 +130,10 @@ values.yaml,charts,chatrs.yaml,templetes.
 * in that mysql-operator is my repo name
 * enter the details in above they are mentioned in that see preview116 
 ![preview](./k8s_images/k8s116.png)
-* the given password is not working error came.  
+* the given password is not working error came.
+* Afterenter into mysql"I have no  name!@mysql-0:/" ``mysql -u root -p``  then enter into mysql>use employees_database
+* To uninstall chart ``helm uninstall <name>``
+* If the password decode then we have to base64 encoded password.
 # 2. PostgreSql
 * [referhere](https://bitnami.com/stack/postgresql/helm)
 * For installation postgresql helm command is ``helm install my-release oci://registry-1.docker.io/bitnamicharts/postgresql``
