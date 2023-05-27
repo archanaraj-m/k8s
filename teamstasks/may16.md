@@ -133,7 +133,6 @@ values.yaml,charts,chatrs.yaml,templetes.
 * the given password is not working error came.
 * Afterenter into mysql"I have no  name!@mysql-0:/" ``mysql -u root -p``  then enter into mysql>use employees_database
 * To uninstall chart ``helm uninstall <name>``
-* If the password decode then we have to base64 encoded password.
 # 2. PostgreSql
 * [referhere](https://bitnami.com/stack/postgresql/helm)
 * For installation postgresql helm command is ``helm install my-release oci://registry-1.docker.io/bitnamicharts/postgresql``
