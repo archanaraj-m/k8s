@@ -23,7 +23,7 @@ EKS Cluster
   * terraform
   * eksctl this will be used
 * Features [referhere](https://aws.amazon.com/eks/features/)
-* Create a linux instance, install aws cli, create iam credentials
+* Create a linux instance(t2micro), install aws cli, create iam credentials
 * After connecting the ubuntu ``sudo apt update``&&``sudo apt install unzip -y``
 ![preview](./k8s_images/k8s101.png)
 * For install awscli
@@ -32,7 +32,7 @@ curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip
 unzip awscliv2.zip
 sudo ./aws/install
 ```
-* Next check it ``aws --version`` and ``awsconfigure``
+* Next check it ``aws --version`` and ``aws configure``
 * install kubectl [Refer Here](https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/#install-using-other-package-management)
 * we had followed direct installation [Refer Here](https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/#install-kubectl-binary-with-curl-on-linux)
 * For install kubectl command is``curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" ``&&``sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl``
@@ -63,12 +63,12 @@ apiVersion: eksctl.io/v1alpha5
 kind: ClusterConfig
 
 metadata:
-  name: basic-cluster # we can give any name it is cluster name
+  name: mycluster # we can give any name it is cluster name
   region: eu-west-3
 
 nodeGroups:
   - name: basic # node group name
-    instanceType: t2.large
+    instanceType: t2.medium
     desiredCapacity: 2
     volumeSize: 20
     ssh:
