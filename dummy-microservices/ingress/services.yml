@@ -4,7 +4,6 @@ kind: Service
 metadata:
   name: basket-svc
 spec:
-  type: LoadBalancer
   selector:
     app: basket
   ports:
@@ -17,7 +16,6 @@ kind: Service
 metadata:
   name: catalog-svc
 spec:
-  type: LoadBalancer
   selector:
     app: catalog
   ports:
@@ -30,7 +28,6 @@ kind: Service
 metadata:
   name: identity-svc
 spec:
-  type: LoadBalancer
   selector:
     app: identity
   ports:
@@ -43,7 +40,6 @@ kind: Service
 metadata:
   name: order-svc
 spec:
-  type: LoadBalancer
   selector:
     app: order
   ports:

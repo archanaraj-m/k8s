@@ -40,7 +40,65 @@ API Gateway
 Kubernetes Ingress Controller
 Docker Swarm Ingress Controller
 Traefik Enterprise simplifies the discovery, security, and deployment of APIs and microservices across any environmentests.
+* First in cluster node or take any another node  install docker with docker commands
+```
+curl -fsSL https://get.docker.com -o get-docker.sh
+sh get-docker.sh
+sudo usermod -aG docker ubuntu 
+exit and relogin
+docker info
+```
+![preview](./k8s_images/k8s146.png) 
+* create one folder for micro services
+* In that create 4 different micro services with names basket,identity,order,catalog.
+* In that create docker file and index.html
+* In that create ingress folder in that deployment.yml,service.yml
+* Next login to the docker instance(or cluster instance) clone my git k8s.
+![preview](./k8s_images/k8s147.png) 
+* After docker login create docker image in idity service``docker image build -t archanaraj/dummy-id-service:1.0.0 .`` 
+![preview](./k8s_images/k8s148.png)
+* Then run the container``docker container run -d -P archanaraj/dummy-id-service:1.0.0``
+* Next ``docker container ls``
+* copy the instance publicIP:that port then page came
+![preview](./k8s_images/k8s149.png)
+* Then push the image to ``docker image push <dockerhub username>/<imagename>`` ``docker image push archanaraj/dummy-id-service:1.0.0``
+* same as like for all services
+![preview](./k8s_images/k8s150.png)
+![preview](./k8s_images/k8s151.png)
+* After creating cluster``kubectl get nodes``
+* In k8s we have 3 major objects which will help in ingress (layer 7 loadbalancing)
+   * ingress
+   * ingressController: This is a third party implementation Refer Here
+   * ingressClass
+* K8s doesnot have controller for ingress.
+* Now we are using nginx-ingress-controller with helm in eks 
+* For that first we install helm in that cluster(master node)
+```
+curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+chmod 700 get_helm.sh
+./get_helm.sh
+```
+* lets install nginx-ingress controller using helm
+```
+helm repo add nginx-stable https://helm.nginx.com/stable
+helm repo update
+helm upgrade --install ingress-nginx ingress-nginx \
+             --repo https://kubernetes.github.io/ingress-nginx \
+             --namespace ingress-nginx --create-namespace
+
+``` 
+![preview](./k8s_images/k8s152.png)
+
+* After last command we see output which better copy to some notepad
+* Now execute the following command to watch for external ip to nginx ingress controller   ``kubectl --namespace ingress-nginx get services -o wide -w ingress-nginx-controller``
+![preview](./k8s_images/k8s153.png)
+* Then create deployment and service files in ingress folder
+* Get ingress classes and there should be nginx ingress class from helm chart
+* ![preview](./k8s_images/k8s154.png)
+* lets deploy application and services.
 * 
+
+
 
 Activity :1
 1. Creating the EKS Cluster or AKS cluster

@@ -2,13 +2,13 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: dashboard-deploy
+  name: identity-deploy
 spec:
   minReadySeconds: 5
   replicas: 3
   selector:
     matchLabels:
-      app: dashboard
+      app: identity
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -16,13 +16,42 @@ spec:
       maxUnavailable: 1
   template:
     metadata:
-      name: dashboard-pod
+      name: identity-pod
       labels:
-        app: dashboard
+        app: identity
         version: "1.0.0"
     spec:
       containers:
-        - name: dashboard
-          image: shaikkhajaibrahim/dashboardservice:1.0.0
+        - name: identity
+          image: archanaraj/dummy-id-service:1.0.0
           ports:
             - containerPort: 80
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: catalog-deploy
+spec:
+  minReadySeconds: 5
+  replicas: 3
+  selector:
+    matchLabels:
+      app: catalog
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  template:
+    metadata:
+      name: catalog-pod
+      labels:
+        app: catalog
+        version: "1.0.0"
+    spec:
+      containers:
+        - name: catalog
+          image: archanaraj/dummy-id-service:1.0.0
+          ports:
+            - containerPort: 80            
