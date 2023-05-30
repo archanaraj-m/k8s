@@ -110,6 +110,7 @@ helm upgrade --install ingress-nginx ingress-nginx \
 ![preview](./k8s_images/k8s158.png)
 ![preview](./k8s_images/k8s159.png)
 ![preview](./k8s_images/k8s160.png)
+* Next delete the cluster don't forget.
 
 Activity :1
 1. Creating the EKS Cluster or AKS cluster
