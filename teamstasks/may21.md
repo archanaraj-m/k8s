@@ -54,6 +54,7 @@ docker info
 * In that create docker file and index.html
 * In that create ingress folder in that deployment.yml,service.yml
 * Next login to the docker instance(or cluster instance) clone my git k8s.
+# importent if any changes in my K8s in vcs(visual studio code)after git push, In my ubuntu git pull is madtory for pull the changes.
 ![preview](./k8s_images/k8s147.png) 
 * After docker login create docker image in idity service``docker image build -t archanaraj/dummy-id-service:1.0.0 .`` 
 ![preview](./k8s_images/k8s148.png)
@@ -96,6 +97,10 @@ helm upgrade --install ingress-nginx ingress-nginx \
 * Get ingress classes and there should be nginx ingress class from helm chart
 * ![preview](./k8s_images/k8s154.png)
 * lets deploy application and services.
+* Goto ingress folder (because i clone my repo k8s)then goto that ingress folder apply command is ``kubectl apply -f .``
+ ![preview](./k8s_images/k8s155.png)
+* For all resources``kubectl get all``
+![preview](./k8s_images/k8s156.png)
 * 
 
 
