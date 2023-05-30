@@ -52,6 +52,66 @@ spec:
     spec:
       containers:
         - name: catalog
-          image: archanaraj/dummy-id-service:1.0.0
+          image: archanaraj/dummy-catalog-srv:1.0.0
           ports:
             - containerPort: 80            
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: order-deploy
+spec:
+  minReadySeconds: 5
+  replicas: 3
+  selector:
+    matchLabels:
+      app: order
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  template:
+    metadata:
+      name: order-pod
+      labels:
+        app: order
+        version: "1.0.0"
+    spec:
+      containers:
+        - name: order
+          image: archanaraj/dummy-order-srv:1.0.0
+          ports:
+            - containerPort: 80
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: basket-deploy
+spec:
+  minReadySeconds: 5
+  replicas: 3
+  selector:
+    matchLabels:
+      app: basket
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  template:
+    metadata:
+      name: basket-pod
+      labels:
+        app: basket
+        version: "1.0.0"
+    spec:
+      containers:
+        - name: basket
+          image: archanaraj/dummy-basket-srv:1.0.0
+          ports:
+            - containerPort: 80                
+
+
