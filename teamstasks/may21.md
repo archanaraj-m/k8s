@@ -101,9 +101,15 @@ helm upgrade --install ingress-nginx ingress-nginx \
  ![preview](./k8s_images/k8s155.png)
 * For all resources``kubectl get all``
 ![preview](./k8s_images/k8s156.png)
-* 
-
-
+* After that add ecommerce-ingree.yml file add thenafter git push ``git pull`` see preview157
+* Next goto that folder then ``kubectl apply -f ecommerce-ingress.yml``
+* Next ``kubectl get ingress``
+* Next for external-IP``ubectl --namespace ingress-nginx get services -o wide -w ingress-nginx-controller``
+![preview](./k8s_images/k8s157.png) 
+* copy that EXTERNAL-IP then paste it in new tab/order or /basket or /catalog or /identity see previews
+![preview](./k8s_images/k8s158.png)
+![preview](./k8s_images/k8s159.png)
+![preview](./k8s_images/k8s160.png)
 
 Activity :1
 1. Creating the EKS Cluster or AKS cluster
