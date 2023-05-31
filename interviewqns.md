@@ -226,4 +226,8 @@ What is default dns in k8s?
 communication between two services in different namespaces
 How to auto scale nodes in aks/eks? cluster node autoscaler
 List down atleast 10 most common k8s failures?
-Share this:
+* what are the strategies we used in kubernetes?
+* rolling update
+* rolleover
+* green deployment
+*  
