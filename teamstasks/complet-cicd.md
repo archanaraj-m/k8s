@@ -1,132 +1,13 @@
 # k8s CICD with jenkins
-* For documentation [Referhere](https://jhooq.com/ci-cd-jenkins-kubernetes/)
+* For documentation [Referhere](https://jhooq.com/ci-cd-jenkins-kubernetes/)but it is different.so i can follow anotherway
 
 Pre-Requisites
 --------------
-1. Alright so before we start setting up our CI/CD pipeline I have setup my kuernetes cluster already.
-* As you can see in the sketch we will have three servers(virtual machine)
-![preview](../teamstasks/k8s_images/k8s132.png)
-  1. Jenkins Server
-  2. Kubernetes Master
-  3. Kubernetes Worker
-* In that preview On left we can see Jenkins server where we have only installed Jenkins and we should keep in mind that we are not running Jenkins inside kubernetes cluster. (It is not recommended to run Jenkins inside kubernetes cluster.)
-
-* On the right hand side you will see two servers one is k8smaster for kubernetes master node and k8sworker for kubernetes worker.
-
-* Jenkins server will connect to k8smaster and k8sworker for doing the continuous deployment.
-* Next we create this instances by using terrform``vi main.tf``
-```h
-resource "aws_instance" "jenkinsserver" {
-  ami           = "ami-008bcc0a51a849165"
-  instance_type = "t2.micro"
-  subnet_type   = "private"
-  aws_security_group = "port_all"
-  
-  cpu_options {
-    core_count       = 2
-    threads_per_core = 2
-  }
-  
-  tags = {
-    Name = "jenkins"
-  }
-}
-resource "aws_instance" "k8smaster" {
-  ami           = "ami-008bcc0a51a849165"
-  instance_type = "t2.medium"
-  subnet_type   = "private"
-  aws_security_group = "port_all"
-  
-  cpu_options {
-    core_count       = 2
-    threads_per_core = 2
-  }
-  
-  tags = {
-    Name = "master"
-  }
-} 
-resource "aws_instance" "k8sworker" {
-  ami           = "ami-008bcc0a51a849165"
-  instance_type = "t2.medium"
-  subnet_type   = "private"
-  aws_security_group = "port_all"
-  
-  cpu_options {
-    core_count       = 2
-    threads_per_core = 2
-  }
-  
-  tags = {
-    Name = "worker"
-  }
-}   
-resource "aws_vpc" "my_vpc" {
-  cidr_block = "192.168.0.0/16"
-
-  tags = {
-    Name = "vpc"
-  }
-}
-
-resource "aws_security_group" "port_all" {
-  name        = "port_all"
-  description = "Allow TLS inbound traffic"
-  vpc_id      = aws_vpc.main.id
-
-  ingress {
-    description      = "TLS from VPC"
-    from_port        = 0
-    to_port          = 65535
-    protocol         = "tcp"
-    cidr_blocks      = [aws_vpc.main.cidr_block]
-    ipv6_cidr_blocks = [aws_vpc.main.ipv6_cidr_block]
-  }
-
-  egress {
-    from_port        = 0
-    to_port          = 0
-    protocol         = "-1"
-    cidr_blocks      = ["0.0.0.0/0"]
-    ipv6_cidr_blocks = ["::/0"]
-  }
-
-  tags = {
-    Name = "port_all"
-  }
-}
-
-resource "aws_subnet" "my_subnet" {
-  vpc_id            = aws_vpc.my_vpc.id
-  cidr_block        = "192.168.10.0/24"
-  availability_zone = "eu-west-3a"
-
-  tags = {
-    Name = "private_sb"
-  }
-}
-```
-* provider.tf
-```h
-terraform {
-  required_providers {
-    aws = {
-      source = "hashicorp/aws"
-      version = "4.61.0"
-    }
-  }
-}
-
-provider "aws" {
-  region = "eu-west-3"
-}
-```
-
-1. Where does Github and Docker Hub fits in the CI/CD
+1. we start setting up our CI/CD pipeline.
+2. Where does Github and Docker Hub fits in the CI/CD
 We will use Git Hub as version control to push our application code. In this lab session we will be using Springpetclinic.
-
 * Secondly we will use DockerHub for uploading/pushing the Docker image. Here is the overview of our GitHub and DockerHub flow 
-![preview](../teamstasks/k8s_images/k8s131.png)
+![preview](./k8s_images/k8s131.png)
 Step 1 - Checkin/Push your code to GitHub
 
 Step 2 - Pull your code from GitHub into your Jenkins server
@@ -139,7 +20,7 @@ Step 5 - Push your latest Docker image to DockerHub
 
 Step 6 - Pull the latest image from DockerHub into jenkins.
 
-Step 7 - Then use k8s-spc-deployment.yml to deploy your application inside your kubernetes cluster.
+Step 7 - Then use spc-deployment.yml to deploy your application inside your kubernetes cluster.
 
 3. Install Jenkins on jenkinsserver
 
@@ -155,32 +36,33 @@ sudo sh -c 'echo deb https://pkg.jenkins.io/debian-stable binary/ > \
 sudo apt-get update
 sudo apt-get install jenkins
 ```
-![preview](../teamstasks/k8s_images/k8s133.png)
+![preview](./k8s_images/k8s133.png)
 4. Verify Jenkins installation:
 * After installing Jenkins we can verify the jenkins installation by accessing the initial login page of the jenkins.
 
-* Since we have installed Jenkins on virtual machine with IP:8080
+* Since we have installed Jenkins on virtual machine with IP address:8080
+
 * Find Default jenkins password:
  As we can see we need to provide Default jenkins(initialAdminPassword) administrator password.on this path ``cat /var/lib/jenkins/secrets/initialAdminPassword``
-![preview](../teamstasks/k8s_images/k8s134.png)
+![preview](./k8s_images/k8s134.png)
 * After enter the password customize jenkins page opened in that click on install suggested plugin.
-![preview](../teamstasks/k8s_images/k8s135.png)
+![preview](./k8s_images/k8s135.png)
 * Select install suggested plugin and then it should install all the default plugins which is required for running Jenkins.
 * After successful login setup username and password
-![preview](../teamstasks/k8s_images/k8s136.png)
-![preview](../teamstasks/k8s_images/k8s137.png)
 * After we have installed all the suggested default plugins, it will prompt you for setting up username and password
+![preview](./k8s_images/k8s136.png)
+![preview](./k8s_images/k8s137.png)
 * After that jenkins is ready to use click on start using jenkins
 ![preview](../teamstasks/k8s_images/k8s138.png)
-5. Jenkins - Install "SSH Pipeline Steps" plugin and "Gradle":
+1. Jenkins - Install "SSH Pipeline Steps" plugin and "Gradle":
 * SSH Pipeline Steps:
 * we need to install one more plugin SSH Pipeline Steps which we are going to use for SSH into k8smaster and k8sworker server.
 
 * For installing plugin please goto - Manage Jenkins -> Manage Plugin -> Available then in the search box type SSH Pipeline Steps.
 
 * Select the plugin and install it without restart.
-![preview](../teamstasks/k8s_images/k8s139.png)
-* Setup Gradle:
+![preview](./k8s_images/k8s139.png)
+* Setup Gradle:(if we can use gradle then follow this step other wise follow maven steps)
 For this lab session we are going to use Spring pet clinic Application, so for that we need Gradle as our build tool.
 
 * To setup Gradle Goto - Manage Jenkins -> Global Tool Configuration -> Gradle
@@ -189,6 +71,7 @@ For this lab session we are going to use Spring pet clinic Application, so for t
 
 * After that click on the checkbox - Install Automatically and from the drop down Install from Gradle.org select latest version.
 * Now We are not installing any plugins for jenkins,we have completed the jenkins and jenkins plugin setup.
+
 6. Install Docker on jenkinsserver:
 * Now we need to install Docker on jenkinsserver since we need to push our docker image to DockerHub.
 * Install Docker:
@@ -200,21 +83,71 @@ sudo usermod -aG docker jenkins
 exit and relogin
 docker info
 ```
-![preview](../teamstasks/k8s_images/k8s140.png) 
+![preview](./k8s_images/k8s140.png) 
 7. Take spc application 
 * Now its time for you to look at our application which we are going to deploy inside kubernetes cluster using Jenkins Pipeline.
 * you can clone the code repo from - Source Code
+```yml
+---
+apiVersion: apps/v1 
+kind: Deployment
+metadata:
+  name: spc-deploy
+  labels:
+    app: spc  
+spec:
+  minReadySeconds: 3
+  replicas: 1
+  selector:
+    matchLabels:
+      app: spc
+  template:
+    metadata:
+      labels: 
+        app: spc
+    spec:
+      containers: 
+        - name: spc-cont
+          image: archanaraj/myspcimage:latest
+          ports :
+            - containerPort: 8080    
 
-* The source code also include the Dockerfile for building the dockerimage
-```dockerfile
-FROM amazoncorretto:11
-LABEL author="archana"
-LABEL organization="qt"
-LABEL project="learning"
-COPY spring-petclinic-2.4.2.jar  /spring-petclinic-2.4.2.jar
-EXPOSE 8080
-CMD ["sleep", "10s"]
+---
+apiVersion: v1
+kind: Service
+metadata: 
+  name: spc-lb
+spec:
+  selector:
+    app: spc
+  ports:
+    - name: spc 
+      port: 32000
+      targetPort: 8080
+  type: LoadBalancer 
 ```
+* The source code also include the Dockerfile for building the dockerimage(now I can use mutistage dockerfile)
+
+```dockerfile
+FROM alpine/git AS vcs
+RUN cd / && git clone https://github.com/spring-projects/spring-petclinic.git && \
+    pwd && ls /spring-petclinic
+
+FROM maven:3-amazoncorretto-17 AS builder
+COPY --from=vcs /spring-petclinic /spring-petclinic
+RUN ls /spring-petclinic 
+RUN cd /spring-petclinic && mvn package
+
+FROM amazoncorretto:17-alpine-jdk
+LABEL author="archana"
+EXPOSE 8080
+ARG HOME_DIR=/spc
+WORKDIR ${HOME_DIR}
+COPY --from=builder /spring-petclinic/target/spring-*.jar ${HOME_DIR}/spring-petclinic.jar
+EXPOSE 8080
+CMD ["java", "-jar", "spring-petclinic.jar"]
+```
+
 8. Write the Pipeline script:
 * CI/CD Jenkins Pipeline script into steps
 8.1 Create Jenkins Pipeline
@@ -222,27 +155,26 @@ CMD ["sleep", "10s"]
 
 Goto : Jenkins -> New Items
 
-=>Enter an item name : spc
+=>Enter an item name : mynode
 
 =>Select Pipeline
 
 =>Click Ok
+
 8.2 Clone the Git Repo
 * The first principle of the CI/CD pipeline is to clone/checkout the source code, using the same principle we are going to clone the GIT Repo inside Jenkins
 
 8.3 Jenkins store git credentials
 * As you know we cannot store plain text password inside jenkins scripts, so we need to store it somewhere securely.
-
 * Jenkins Manage Credential provides very elegant way to store GitHub Username and Password.
-
 * Goto : Jenkins -> Manage Jenkins -> Manage Credentials
 * Keep the ID somewhere store so that you remember - GIT_HUB_CREDENTIALS
-![preview](../teamstasks/k8s_images/k8s141.png)
+![preview](./k8s_images/k8s141.png)
 8.4 Build the Spring Pet Clinic
-* Next step would be to build the Spc Using Gradle
+* Next step would be to build the Spc Using /Maven(now i can use maven)
 
 8.5 Build Docker image and tag it
-* After successful Gradle Build we are going to build Docker Image and after that I am going to tag it with the name myspcimage-latest
+* After successful Gradle Build we are going to build Docker Image and after that I am going to tag it with the name myspcimage-latest this commands used in pipeline``docker build -t spcimage .``&&``docker image tag spcimage archanaraj/spcimage:latest``
 
 8.6 Jenkins store DockerHub credentials
 * For storing DockerHub Credentials you need to GOTO: Jenkins -> Manage Jenkins -> Manage Credentials -> Stored scoped to jenkins -> global -> Add Credentials
@@ -259,11 +191,10 @@ Goto : Jenkins -> New Items
 8.8 Push Docker Image into DockerHub
 * After successful Docker login now we need to push the image to DockerHub
 
-8.9 SSH Into k8smaster server
-* In the previous steps we have installed SSH Pipeline Steps in step no - 5, now we are going to use that plugin to SSH into k8smaster server
+8.9 Junit test results
+* we can see test results with this junit 
 
-8.10 Copy k8s-spc-deployment.yml to k8smaster server
-* After successful login copy k8s-spc-deployment.yml into k8smaster server
+8.10 Now k8s deploy for that i copy spc deployment and svc files and paste in that dummyspring(cicd branch) spc.yml
 
 8.11 Create kubernetes deployment and service
 * Apply the k8s-spc-deployment.yml which will eventually -
@@ -272,52 +203,56 @@ Goto : Jenkins -> New Items
 
 * So here is the final complete pipeline script for my CI/CD Jenkins kubernetes pipeline
 ```js
-node {
-
-    stage("Git Clone"){
-
-        git credentialsId: 'GIT_CREDENTIALS', url: 'https://github.com/archanaraj-m/dummyspring.git'
+pipeline {
+    agent 'any'
+    //triggers { pollSCM ('* * * * *') }
+    parameters {
+        choice(name: 'MAVEN_GOAL', choices: ['package', 'install', 'clean'], description: 'Maven Goal')
     }
-
-     stage('Gradle Build') {
-
-       sh './gradlew build'
-
-    }
-
-    stage("Docker build"){
-        sh 'docker version'
-        sh 'docker build -t spcimage .'
-        sh 'docker image list'
-        sh 'docker tag myspcimage docker push archanaraj/spcimage:cicd'
-    }
-
-    withCredentials([string(credentialsId: 'DOCKER_HUB_PASSWORD', variable: 'PASSWORD')]) {
-        sh 'docker login -u archanraj -p password'
-    }
-
-    stage("Push Image to Docker Hub"){
-        sh 'docker push  archanaraj/spcimage:cicd'
-    }
-
-    stage("SSH Into k8s Server") {
-        def remote = [:]
-        remote.name = 'K8S master'
-        remote.host = '100.0.0.2'
-        remote.user = 'terraform'
-        remote.password = 'password'
-        remote.allowAnyHosts = true
-
-        stage('Put k8s-spc-deployment.yml onto k8smaster') {
-            sshPut remote: remote, from: 'spc-deploy.yml', into: '.'
+    stages {
+        stage('vcs') {
+            steps {
+                git url: 'https://github.com/archanaraj-m/dummyspring.git',
+                    branch: 'cicd'
+            }
         }
-
-        stage('Deploy spring boot') {
-          sshCommand remote: remote, command: "kubectl apply -f spc-deploy.yml"
+        stage('package') {
+            //tools {
+            //   jdk 'JDK_17_UBUNTU'
+            //}
+            steps {
+                sh "./mvnw ${params.MAVEN_GOAL}"
+            }
+        }
+        stage('junit') {
+            steps {
+                archiveArtifacts artifacts: '**/spring-petclinic-3.0.0-SNAPSHOT.jar',
+                                 onlyIfSuccessful: true
+                junit testResults: '**/*.xml'
+            }
+        } 
+        stage("Docker build"){
+            steps { 
+                sh 'docker build -t spcimage .'
+                sh 'docker image list'
+                sh 'docker image tag spcimage archanaraj/spcimage:latest'
+            }
+        } 
+       // withCredentials([string(credentialsId: 'DOCKER_HUB_PASSWORD', variable: 'PASSWORD')]) {
+       // sh 'docker login -u archanraj -p password'
+        stage("Push Image to Docker Hub"){
+            steps {
+                sh 'docker image push  archanaraj/spcimage:latest'      
+            }
+        }
+        stage('k8s deploy') {
+            steps {
+                sh 'kubectl apply -f spc.yml'
+                sh 'kubectl get all'
+            }
         }
     }
-
-}
+}  
 ```
 Conclusion:
 -------------
@@ -328,3 +263,11 @@ Conclusion:
 5. Setup user group for CurrentUser and Jenkins
 6. I created Jenkins Pipeline script for continuous Deployment.
 
+* this below error came because i didn't create aws credentials correctly so that error came ![preview](./k8s_images/k8s161.png)
+![preview](./k8s_images/k8s162.png)
+![preview](./k8s_images/k8s163.png)
+![preview](./k8s_images/k8s164.png)
+![preview](./k8s_images/k8s165.png)
+![preview](./k8s_images/k8s166.png)
+* For copy the config files commands are ``sudo cp ~/.kube/config ~jenkins/.kube/``&&
+``sudo chown -R jenkins: ~jenkins/.kube/``

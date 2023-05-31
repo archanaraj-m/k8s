@@ -78,7 +78,7 @@ nodeGroups:
 * Now execute the command ``eksctl create cluster -f cluster.yml``
 * After creation execute``kubectl get nodes``&&``kubectl get pods --all-namespaces``
 ![preview](./k8s_images/k8s104.png)
-# For deleting the cluster ``eksctl delete cluster --name=<name> [--region=<region>]``example ``eksctl delete cluster --name=basic-cluster --region=eu-west-3``
+# For deleting the cluster ``eksctl delete cluster --name=<name> [--region=<region>]``example ``eksctl delete cluster --name=mycluster --region=eu-west-3``
 ![preview](./k8s_images/k8s117.png)
 * After delete the cluster check in our aws all regions instances,auto scalling groups,volumes.
 
