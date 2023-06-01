@@ -22,7 +22,14 @@ Step 6 - Pull the latest image from DockerHub into jenkins.
 
 Step 7 - Then use spc-deployment.yml to deploy your application inside your kubernetes cluster.
 
-3. Install Jenkins on jenkinsserver
+* First i can goto my jenkins folder in my windows because that i fork that dummy spring in that (fork is one time process only so we can use that with different branches)now i can create a branch with name cicd see preview
+![preview](./k8s_images/k8s171.png)
+* After that goto vcs(visual studio code)in that add jenkinspipeline, spc docker file, and spc deployment,svc(k8s) files see preview
+![preview](./k8s_images/k8s172.png)
+![preview](./k8s_images/k8s173.png)
+![preview](./k8s_images/k8s174.png)
+
+1. Install Jenkins on jenkinsserver
 
 * In jenkins node install jenkins with use of below commands
 * Install Java: we also need Java as pre-requisite for installing jenkins, so lets first install java
@@ -39,9 +46,7 @@ sudo apt-get install jenkins
 ![preview](./k8s_images/k8s133.png)
 4. Verify Jenkins installation:
 * After installing Jenkins we can verify the jenkins installation by accessing the initial login page of the jenkins.
-
 * Since we have installed Jenkins on virtual machine with IP address:8080
-
 * Find Default jenkins password:
  As we can see we need to provide Default jenkins(initialAdminPassword) administrator password.on this path ``cat /var/lib/jenkins/secrets/initialAdminPassword``
 ![preview](./k8s_images/k8s134.png)
@@ -53,7 +58,7 @@ sudo apt-get install jenkins
 ![preview](./k8s_images/k8s136.png)
 ![preview](./k8s_images/k8s137.png)
 * After that jenkins is ready to use click on start using jenkins
-![preview](../teamstasks/k8s_images/k8s138.png)
+![preview](./k8s_images/k8s138.png)
 5. Jenkins - If needed Install "SSH Pipeline Steps" plugin and "Gradle":
 * SSH Pipeline Steps:
 * we need to install one more plugin SSH Pipeline Steps which we are going to use for SSH into k8smaster and k8sworker server.
@@ -71,7 +76,7 @@ For this lab session we are going to use Spring pet clinic Application, so for t
 
 * After that click on the checkbox - Install Automatically and from the drop down Install from Gradle.org select latest version.
 * Now We are not installing any plugins for jenkins,we have completed the jenkins and jenkins plugin setup.
-* Next connect to the jenkins instance in CLI in that alredy jenkins user created so we have to give sudoers permission to that jenkins user, after that connected with user
+* Next connect to the jenkins instance in CLI in that alredy jenkins user created so we have to give sudoers permission to that jenkins user``sudo visudo``, after that connected with user
 
 1. Install Docker on jenkinsserver:
 * Now we need to install Docker on jenkinsserver since we need to push our docker image to DockerHub.
@@ -151,6 +156,7 @@ CMD ["java", "-jar", "spring-petclinic.jar"]
 
 8. Write the Pipeline script:
 * CI/CD Jenkins Pipeline script into steps
+
 8.1 Create Jenkins Pipeline
 * The first step for you would be to create a pipeline.
 
@@ -161,16 +167,26 @@ Goto : Jenkins -> New Items
 =>Select Pipeline
 
 =>Click Ok
+![preview](./k8s_images/k8s177.png)
+* That git repo link paste in jenkins
+![preview](./k8s_images/k8s178.png)
+
+* Goto jenkins=> manage jenkins=> Tools add maven or gradle
+![preview](./k8s_images/k8s179.png)
 
 8.2 Clone the Git Repo
 * The first principle of the CI/CD pipeline is to clone/checkout the source code, using the same principle we are going to clone the GIT Repo inside Jenkins
 
-8.3 Jenkins store git credentials
+8.3 Jenkins store git credentials/give ssh username credentials
 * As you know we cannot store plain text password inside jenkins scripts, so we need to store it somewhere securely.
 * Jenkins Manage Credential provides very elegant way to store GitHub Username and Password.
 * Goto : Jenkins -> Manage Jenkins -> Manage Credentials
 * Keep the ID somewhere store so that you remember - GIT_HUB_CREDENTIALS
 ![preview](./k8s_images/k8s141.png)
+![preview](./k8s_images/k8s175.png)
+![preview](./k8s_images/k8s176.png)
+* click on add then paste that awsvpc code =>create.
+
 8.4 Build the Spring Pet Clinic
 * Next step would be to build the Spc Using /Maven(now i can use maven)
 
@@ -186,6 +202,7 @@ Goto : Jenkins -> New Items
    3. Description - Docker Hub password
 ![preview](./k8s_images/k8s142.png)
 ![preview](./k8s_images/k8s167.png)
+
 8.7 Docker Login via CLI
 * Since I am working inside Jenkins so every step I perform I need to write pipeline script. Now after building and tagging the Docker Image we need to push it to the DockerHub. But before you push to DockerHub you need to authenticate yourself via CLI(command line interface) using docker login.
 * $DOCKER_HUB_PASSWORD -I stored my DockerHub Password into Jenkins and assigned the ID $DOCKER_HUB_PASSWORD see above preview i give dockerhub credentials also.
