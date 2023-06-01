@@ -333,12 +333,14 @@ pipeline {
 ```
 Conclusion:
 -------------
-1. First thing which I did is - setup the kubernetes cluster
-2. Install Jenkins on another server
-3. Install plugin 'SSH Pipeline Step' for jenkins
-4. Install Docker along with Jenkins
-5. Setup user group for CurrentUser and Jenkins
-6. I created Jenkins Pipeline script for continuous Deployment.
+1. First thing which I did is - Install Jenkins in one server
+2. Give the permissions to jenkins user
+3. connect with jenkins user then
+4. Install Docker in Jenkins server
+5. Create the cluster in jenkins server
+6. Give github , docker credentials in Jenkins
+7. After login into the docker ,next give the permissions for .kube config file 
+8. Next I created Jenkins Pipeline script for continuous Deployment.
 
 * this below error came because i didn't create aws credentials correctly so that error came ![preview](./k8s_images/k8s161.png)
 ![preview](./k8s_images/k8s166.png)
