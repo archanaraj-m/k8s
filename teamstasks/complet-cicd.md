@@ -54,7 +54,7 @@ sudo apt-get install jenkins
 ![preview](./k8s_images/k8s137.png)
 * After that jenkins is ready to use click on start using jenkins
 ![preview](../teamstasks/k8s_images/k8s138.png)
-1. Jenkins - Install "SSH Pipeline Steps" plugin and "Gradle":
+5. Jenkins - If needed Install "SSH Pipeline Steps" plugin and "Gradle":
 * SSH Pipeline Steps:
 * we need to install one more plugin SSH Pipeline Steps which we are going to use for SSH into k8smaster and k8sworker server.
 
@@ -67,12 +67,13 @@ For this lab session we are going to use Spring pet clinic Application, so for t
 
 * To setup Gradle Goto - Manage Jenkins -> Global Tool Configuration -> Gradle
 
-* Click on Add Grdle and then enter name default.
+* Click on Add Grdle/maven and then enter name default.
 
 * After that click on the checkbox - Install Automatically and from the drop down Install from Gradle.org select latest version.
 * Now We are not installing any plugins for jenkins,we have completed the jenkins and jenkins plugin setup.
+* Next connect to the jenkins instance in CLI in that alredy jenkins user created so we have to give sudoers permission to that jenkins user, after that connected with user
 
-6. Install Docker on jenkinsserver:
+1. Install Docker on jenkinsserver:
 * Now we need to install Docker on jenkinsserver since we need to push our docker image to DockerHub.
 * Install Docker:
 Use the following command to install the Docker
@@ -84,7 +85,7 @@ exit and relogin
 docker info
 ```
 ![preview](./k8s_images/k8s140.png) 
-7. Take spc application 
+1. Take spc application 
 * Now its time for you to look at our application which we are going to deploy inside kubernetes cluster using Jenkins Pipeline.
 * you can clone the code repo from - Source Code
 ```yml
@@ -183,14 +184,15 @@ Goto : Jenkins -> New Items
    1. Secret - Type in the DockerHub Password
    2. ID - DOCKER_HUB_PASSWORD
    3. Description - Docker Hub password
-![preview](../teamstasks/k8s_images/k8s142.png)
+![preview](./k8s_images/k8s142.png)
+![preview](./k8s_images/k8s167.png)
 8.7 Docker Login via CLI
 * Since I am working inside Jenkins so every step I perform I need to write pipeline script. Now after building and tagging the Docker Image we need to push it to the DockerHub. But before you push to DockerHub you need to authenticate yourself via CLI(command line interface) using docker login.
-* $DOCKER_HUB_PASSWORD - Since I cann't disclose my DockerHub password, so I stored my DockerHub Password into Jenkins Manage Jenkins and assigned the ID $DOCKER_HUB_PASSWORD
-
+* $DOCKER_HUB_PASSWORD -I stored my DockerHub Password into Jenkins and assigned the ID $DOCKER_HUB_PASSWORD see above preview i give dockerhub credentials also.
+![preview](./k8s_images/k8s164.png)
 8.8 Push Docker Image into DockerHub
 * After successful Docker login now we need to push the image to DockerHub
-
+![preview](./k8s_images/k8s170.png)
 8.9 Junit test results
 * we can see test results with this junit 
 
@@ -201,6 +203,81 @@ Goto : Jenkins -> New Items
    1. Create deployment with name - spc
    2. Expose service on NodePort
 
+* Next i can create the cluster in jenkins server only
+* EKS Cluster
+-----------
+* EKS cluster can be created in many ways
+  * aws console
+  * aws cli
+  * terraform
+  * eksctl this will be used
+* Features [referhere](https://aws.amazon.com/eks/features/)
+* Create a linux instance(t2micro), install aws cli, create iam credentials
+* After connecting the ubuntu ``sudo apt update``&&``sudo apt install unzip -y``
+* For install awscli
+```
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+unzip awscliv2.zip
+sudo ./aws/install
+```
+* Next check it ``aws --version`` and ``aws configure``
+* install kubectl [Refer Here](https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/#install-using-other-package-management)
+* we had followed direct installation [Refer Here](https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/#install-kubectl-binary-with-curl-on-linux)
+* For install kubectl command is``curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" ``&&``sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl``
+* After install kubectl check ``kubectl version``
+![preview](./k8s_images/k8s102.png)
+* Install eksctl [Refer Here](https://eksctl.io/introduction/#for-unix)
+```bash
+# for ARM systems, set ARCH to: `arm64`, `armv6` or `armv7`
+ARCH=amd64
+PLATFORM=$(uname -s)_$ARCH
+
+curl -sLO "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$PLATFORM.tar.gz"
+
+# (Optional) Verify checksum
+curl -sL "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_checksums.txt" | grep $PLATFORM | sha256sum --check
+
+tar -xzf eksctl_$PLATFORM.tar.gz -C /tmp && rm eksctl_$PLATFORM.tar.gz
+
+sudo mv /tmp/eksctl /usr/local/bin
+```
+* Before that cluster creation with yml file we have to do aws configure and kubectl configure must.
+![preview](./k8s_images/k8s162.png)
+* Before creating cluster we execute ssh-keygen ``ssh-keygen``
+* Create a file called as cluster.yml with the following content
+* paste below yaml file in this ``vi cluster.yml``
+```yml
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+  name: mycluster # we can give any name it is cluster name
+  region: eu-west-3
+
+nodeGroups:
+  - name: basic # node group name
+    instanceType: t2.medium
+    desiredCapacity: 2
+    volumeSize: 20
+    ssh:
+      allow: true # will use ~/.ssh/id_rsa.pub as the default ssh key
+```
+* before creating cluster we execute ssh-keygen ``ssh-keygen``
+* Now execute the command ``eksctl create cluster -f cluster.yml``
+* After creation execute``kubectl get nodes``&&``kubectl get pods --all-namespaces``
+![preview](./k8s_images/k8s104.png)
+# For deleting the cluster ``eksctl delete cluster --name=<name> [--region=<region>]``example ``eksctl delete cluster --name=mycluster --region=eu-west-3``
+
+* After creating cluster i give the permissions for jenkins user 
+![preview](./k8s_images/k8s163.png)
+* Next for move config file to jenkins user .kube folder and give all permissions 
+![preview](./k8s_images/k8s165.png)
+* For copy the config files commands are ``sudo cp ~/.kube/config ~jenkins/.kube/``&&
+``sudo chown -R jenkins: ~jenkins/.kube/``
+* Next build the pipeline in jenkins 
+![preview](./k8s_images/k8s168.png)
+* After build success check ``kubectl all`` in that externalIP, port is there, copy and paste it in new tab with port spc page came.
+![preview](./k8s_images/k8s169.png)
 * So here is the final complete pipeline script for my CI/CD Jenkins kubernetes pipeline
 ```js
 pipeline {
@@ -264,10 +341,4 @@ Conclusion:
 6. I created Jenkins Pipeline script for continuous Deployment.
 
 * this below error came because i didn't create aws credentials correctly so that error came ![preview](./k8s_images/k8s161.png)
-![preview](./k8s_images/k8s162.png)
-![preview](./k8s_images/k8s163.png)
-![preview](./k8s_images/k8s164.png)
-![preview](./k8s_images/k8s165.png)
 ![preview](./k8s_images/k8s166.png)
-* For copy the config files commands are ``sudo cp ~/.kube/config ~jenkins/.kube/``&&
-``sudo chown -R jenkins: ~jenkins/.kube/``
