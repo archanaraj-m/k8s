@@ -361,3 +361,10 @@ Conclusion:
 
 * this below error came because i didn't create aws credentials correctly so that error came ![preview](./k8s_images/k8s161.png)
 ![preview](./k8s_images/k8s166.png)
+
+* For another process(actual it is better) see previews
+![preview](./k8s_images/k8s180.png)
+![preview](./k8s_images/k8s181.png)
+![preview](./k8s_images/k8s182.png)
+![preview](./k8s_images/k8s183.png)
+![preview](./k8s_images/k8s185.png)
