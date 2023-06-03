@@ -363,6 +363,7 @@ Conclusion:
 ![preview](./k8s_images/k8s166.png)
 
 * For another process(actual it is better) see previews
+* If Enable  the passwd authentication``sudo vi /etc/ssh/sshd_config``
 ![preview](./k8s_images/k8s180.png)
 ![preview](./k8s_images/k8s181.png)
 ![preview](./k8s_images/k8s182.png)
