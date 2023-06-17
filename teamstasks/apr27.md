@@ -100,7 +100,7 @@ kubectl describe po
 * This opens a new file in the vi text editor.
 
 * Paste the following YAML code into the file and save it
-```
+```yml
 ---
 apiVersion: v1
 kind: Pod

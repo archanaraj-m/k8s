@@ -56,7 +56,7 @@ docker info
 * Next login to the docker instance(or cluster instance) clone my git k8s.
 # importent if any changes in my K8s in vcs(visual studio code)after git push, In my ubuntu git pull is madtory for pull the changes.
 ![preview](./k8s_images/k8s147.png) 
-* After docker login create docker image in idity service``docker image build -t archanaraj/dummy-id-service:1.0.0 .`` 
+* After docker login create docker image in identity service``docker image build -t archanaraj/dummy-id-service:1.0.0 .`` 
 ![preview](./k8s_images/k8s148.png)
 * Then run the container``docker container run -d -P archanaraj/dummy-id-service:1.0.0``
 * Next ``docker container ls``
