@@ -1,5 +1,9 @@
 # Kubernetes tasks – 11-05-2023
-* 1.Create 1 master node and 2 worker nodes – run app on node1 and db on node2 by using
+* 1. Node selector task by
+a. Node selector
+b.Affinity
+c. Taints and Tolerances
+* Create 1 master node and 2 worker nodes – run app on node1 and db on node2 by using
     * node selector
     * Affinity
     * taints and tolerance
@@ -332,7 +336,7 @@ spec:
 ![preview](./k8s_images/k8s72.png)
 
 
-# 2.Create k8s cluster with version 1.25 and run any deployment(nginx/any) and then upgrade  custer to version 1.27 
+# 2.Create k8s cluster with version 1.25 and run any deployment(nginx/any) and then upgrade cluster to version 1.27 
 [referhere](https://k21academy.com/docker-kubernetes/k8s-cluster-upgrade-step-by-step/) for documentation. 
 
 * For install specfic version command is ``sudo apt-get install -qy kubelet=<version> kubectl=<version> kubeadm=<version>``

@@ -1,5 +1,7 @@
-# Kubernetes (k8s) Activities (MAY9th/2023)
-* 1.Create a Kubernetes cluster using kubeadm
+* Kubernetes (k8s) Activities (MAY9th/2023)
+
+# 1.Create a Kubernetes cluster using kubeadm
+
 kubeadm instalation
 --------------------
 * First we can create 2 instances with t2 medium
@@ -179,6 +181,7 @@ sudo apt-mark hold kubelet kubeadm kubectl
 * for restore command is ``ETCDCTL_API=3 etcdctl snapshot restore /snapshot.db``
 * after backup again ckeck the pods in runnig status with namespace command is ``kubectl get po -n kube-system``
 ![preview](./k8s_images/k8s65.png)
+
 # 4.List out all the pod’s running in kube system namespace
 * command is ``kubectl get pods --all-namespaces``
 ![preview](./k8s_images/k8s39.png)

@@ -69,7 +69,7 @@ docker info
 * After creating cluster``kubectl get nodes``
 * In k8s we have 3 major objects which will help in ingress (layer 7 loadbalancing)
    * ingress
-   * ingressController: This is a third party implementation Refer Here
+   * ingressController: This is a third party implementation 
    * ingressClass
 * K8s doesnot have controller for ingress.
 * Now we are using nginx-ingress-controller with helm in eks 

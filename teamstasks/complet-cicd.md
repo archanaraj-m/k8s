@@ -22,7 +22,7 @@ Step 6 - Pull the latest image from DockerHub into jenkins.
 
 Step 7 - Then use spc-deployment.yml to deploy your application inside your kubernetes cluster.
 
-* First i can goto my jenkins folder in my windows because that i fork that dummy spring in that (fork is one time process only so we can use that with different branches)now i can create a branch with name cicd see preview
+* First i can goto my jenkins folder in my windows because i fork that dummy spring in that (fork is one time process only so we can use that with different branches)now i can create a branch with name cicd see preview
 ![preview](./k8s_images/k8s171.png)
 * After that goto vcs(visual studio code)in that add jenkinspipeline, spc docker file, and spc deployment,svc(k8s) files see preview
 ![preview](./k8s_images/k8s172.png)
