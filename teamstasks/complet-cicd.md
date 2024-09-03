@@ -264,6 +264,7 @@ sudo mv /tmp/eksctl /usr/local/bin
 * Create a file called as cluster.yml with the following content
 * paste below yaml file in this ``vi cluster.yml``
 ```yml
+---
 apiVersion: eksctl.io/v1alpha5
 kind: ClusterConfig
 
