@@ -53,7 +53,7 @@ Terms
 * Pet Vs Cattle
 
 # What Kubernetes can do?
-![preview](./k8s_images/img14.png)
+![preview](../manifests/teamstasks/k8s_images/img13.png)
 
 Kubernetes Architecture
 -------------------------
