@@ -194,8 +194,7 @@ If the pod fails, then that pod will not be created again, another new pod will 
 [referhere](https://kubernetes.io/docs/concepts/workloads/controllers/job/)
 
 * ReplicaSets
-* 
-
+  
 * Deployment
 
 * Service / Headless Service
@@ -230,4 +229,3 @@ List down atleast 10 most common k8s failures?
 * rolling update
 * rolleover
 * green deployment
-*  
